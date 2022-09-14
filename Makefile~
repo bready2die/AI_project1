@@ -1,0 +1,10 @@
+example: icli.o gfx.o main.o
+	gcc ./main.o ./icli.o gfx.o -o path_finder -ledit -lX11	
+gfx.o:
+	gcc -c ./gfx.c
+icli.o: 
+	gcc -c ./icli.c
+main.o:
+	gcc -c ./main.c
+clean:
+	rm path_finder *.o icli_history cli.log path.dot
