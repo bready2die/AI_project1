@@ -16,16 +16,16 @@ struct line {
 };
 
 
-static point start = {-1,-1};
+static struct point start = {-1,-1};
 
-static point goal  = {-1,-1};
+static struct point goal  = {-1,-1};
 		
 void drawgrid()
 {
-		for(int i = 5; i < WINHEIGHT; i += 10) {
+		for (int i = 5; i < WINHEIGHT; i += 10) {
 				gfx_line(0,i,WINWIDTH,i);
 		}
-		for(int i = 5; i < WINWIDTH; i += 10) {
+		for (int i = 5; i < WINWIDTH; i += 10) {
 				gfx_line(i,0,i,WINHEIGHT);
 		}
 }
@@ -51,5 +51,8 @@ int start_graphics()
 
 void set_goal(int x, int y)
 {
-		
+		if (goal.x != -1) {
+				//remove goal point
+		}
+		//set new goal point
 }
