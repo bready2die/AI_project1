@@ -2,8 +2,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <linux/limits.h>
+#include <pthread.h>
 #include "icli.h"
 #include "input.h"
+#include "window.h"
 //#include "graphics.h"
 
 struct my_context {
@@ -113,7 +115,8 @@ int main(int argc, char **argv)
 				goto out;
 		}
 		printf("everything went smoothly\n");
-		start_graphics();
+		//start_graphics();
+		start_window();
 		icli_run();
 out:
 		fclose(user_context.log);

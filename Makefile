@@ -1,16 +1,19 @@
-example: icli.o main.o graphics.o gfx.o input.o
-	gcc ./main.o ./icli.o ./graphics.o ./gfx.o ./input.o -o path_finder -ledit -lX11
+example: icli.o main.o graphics.o gfx.o input.o window.o scene.o
+	gcc ./main.o ./window.o ./icli.o ./graphics.o ./gfx.o ./input.o ./scene.o -o path_finder -ledit -lX11
 
-
+scene.o:
+	gcc -Wall -g -c ./scene.c
+window.o:
+	gcc -Wall -g -c ./window.c
 input.o:
-	gcc -c ./input.c
+	gcc -Wall -g -c ./input.c
 graphics.o: 
-	gcc -c ./graphics.c 
+	gcc -Wall -g -c ./graphics.c 
 gfx.o:
-	gcc -c ./gfx.c
+	gcc -Wall -g -c ./gfx.c
 icli.o: 
-	gcc -c ./icli.c
+	gcc -Wall -g -c ./icli.c
 main.o:
-	gcc -c ./main.c
+	gcc -Wall -g -c ./main.c
 clean:
 	rm path_finder *.o icli_history cli.log path.dot

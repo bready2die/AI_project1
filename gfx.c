@@ -10,6 +10,7 @@ Version 2, 9/23/2011 - Fixes a bug that could result in jerky animation.
 */
 
 #include <X11/Xlib.h>
+#include <X11/Xutil.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,34 +27,52 @@ static Window  gfx_window;
 static GC      gfx_gc;
 static Colormap gfx_colormap;
 static int      gfx_fast_color_mode = 0;
-
+static XSetWindowAttributes attr;
+static int screen;
+static int depth;
 /* These values are saved by gfx_wait then retrieved later by gfx_xpos and gfx_ypos. */
 
 static int saved_xpos = 0;
 static int saved_ypos = 0;
 
+
+
+XSizeHints sizehints = {
+	.min_width = 510,
+	.min_height = 1010,
+	.max_width = 510,
+	.max_height = 1010,
+	.base_width = 510,
+	.base_height = 1010,
+	.win_gravity = StaticGravity,
+};
 /* Open a new graphics window. */
 
 void gfx_open( int width, int height, const char *title )
 {
+
 	gfx_display = XOpenDisplay(0);
 	if(!gfx_display) {
 		fprintf(stderr,"gfx_open: unable to open the graphics window.\n");
 		exit(1);
 	}
-
+	screen = DefaultScreen(gfx_display);
 	Visual *visual = DefaultVisual(gfx_display,0);
 	if(visual && visual->class==TrueColor) {
 		gfx_fast_color_mode = 1;
 	} else {
 		gfx_fast_color_mode = 0;
 	}
-
+	depth = DefaultDepth(gfx_display,screen);
+	attr.background_pixel = XWhitePixel(gfx_display,screen);
+	attr.override_redirect = True;
 	int blackColor = BlackPixel(gfx_display, DefaultScreen(gfx_display));
 	int whiteColor = WhitePixel(gfx_display, DefaultScreen(gfx_display));
-
-	gfx_window = XCreateSimpleWindow(gfx_display, DefaultRootWindow(gfx_display), 0, 0, width, height, 0, blackColor, blackColor);
-
+	
+	//gfx_window = XCreateSimpleWindow(gfx_display, DefaultRootWindow(gfx_display), 0, 0, width, height, 0, blackColor, blackColor);
+	gfx_window = XCreateWindow( gfx_display,XRootWindow(gfx_display,screen),
+                            0, 0, width, height, 0, depth,  InputOutput,
+                            visual ,CWBackPixel|CWOverrideRedirect , &attr);
 	XSetWindowAttributes attr;
 	attr.backing_store = Always;
 
@@ -70,7 +89,7 @@ void gfx_open( int width, int height, const char *title )
 	gfx_colormap = DefaultColormap(gfx_display,0);
 
 	XSetForeground(gfx_display, gfx_gc, whiteColor);
-
+	XSetWMNormalHints(gfx_display,gfx_window,&sizehints);
 	// Wait for the MapNotify event
 
 	for(;;) {
@@ -93,6 +112,11 @@ void gfx_point( int x, int y )
 void gfx_line( int x1, int y1, int x2, int y2 )
 {
 	XDrawLine(gfx_display,gfx_window,gfx_gc,x1,y1,x2,y2);
+}
+
+void gfx_circle(int x, int y, int rad)
+{
+	XDrawArc(gfx_display,gfx_window,gfx_gc,x,y,rad,rad,0,360*64);
 }
 
 /* Change the current drawing color. */

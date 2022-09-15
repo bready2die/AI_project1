@@ -6,8 +6,9 @@
 #include <errno.h>
 #include <limits.h>
 #include "input.h"
+#include "scene.h"
 
-
+#define TEST_CIRCLES 1
 
 static struct icli_command *goal;
 static struct icli_command *start;
@@ -19,6 +20,12 @@ static struct icli_command *weight;
 static struct icli_command *run;
 static struct icli_command *runfile;
 static struct icli_command *exit_sim;
+
+#ifdef TEST_CIRCLES
+static int goal_set = 0;
+
+static struct circle goal_circle;
+#endif
 
 static int check_number(int val,int range)
 {
@@ -48,6 +55,22 @@ static enum icli_ret goal_cmd(char **argv, int argc, void *context)
 				icli_err_printf("Invalid or out of range y operand\n");
 				return ICLI_ERR;
 		}
+#ifdef TEST_CIRCLES
+		struct circle circle = {
+				.x = 3 + ((int)x*10),
+				.y = 3 + ((int)y*10),
+				.rad = 5,
+				.r = 0,
+				.g = 255,
+				.b = 0,
+		};
+		if (goal_set)
+				delcircle(&goal_circle);
+		goal_set = 1;
+		memcpy(&goal_circle,&circle,sizeof(struct circle));
+		addcircle(&circle);
+		redraw_scene();
+#endif
 		icli_printf("goal not yet implemented\n");
 		errno = 0;
 		

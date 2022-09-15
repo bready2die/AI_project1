@@ -4,6 +4,8 @@ CSE 20211
 9/7/2011
 by Prof. Thain
 */
+#ifndef GRAPHICS_LIB
+#define GRAPHICS_LIB 1
 
 #include <stdio.h>
 #include "gfx.h"
@@ -13,5 +15,4 @@ void drawgrid();
 
 int start_graphics();
 
-
-
+#endif

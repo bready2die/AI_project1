@@ -2,7 +2,7 @@
 #include <stdio.h>
 //#include "gfx.h"
 #include "graphics.h"
-
+/*
 struct point {
 		int x;
 		int y;
@@ -29,7 +29,7 @@ void drawgrid()
 				gfx_line(i,0,i,WINHEIGHT);
 		}
 }
-
+*/
 int start_graphics()
 {
 		int ysize = WINHEIGHT;
@@ -44,11 +44,11 @@ int start_graphics()
 		gfx_clear();
 		// Set the current drawing color to green.
 		gfx_color(255,0,0);
-		drawgrid();
+		//drawgrid();
 		gfx_flush();
 }
 
-
+/*
 void set_goal(int x, int y)
 {
 		if (goal.x != -1) {
@@ -56,3 +56,4 @@ void set_goal(int x, int y)
 		}
 		//set new goal point
 }
+*/
