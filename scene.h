@@ -14,6 +14,9 @@
 #define GRID_G 0
 #define GRID_B 0
 
+#define BLOCK_R 0
+#define BLOCK_G 0
+#define BLOCK_B 0
 
 
 #define _COLOR_SHAPE(__shape, __r,__g,__b)	\
@@ -60,7 +63,7 @@ do {						\
 #define BLOCKING_LINE(_x1, _y1, _x2, _y2)			\
 ({								\
 	_MAKE_LINE(__temp_line,(_x1),(_y1),(_x2),(_y2));	\
-	_COLOR_SHAPE(__temp_line,START_R,START_G,START_B);	\
+	_COLOR_SHAPE(__temp_line,BLOCK_R,BLOCK_G,BLOCK_B);	\
 	__temp_line;						\
 })
 
