@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include "gfx.h"
 #include "scene.h"
 #include "window.h"
 
@@ -7,19 +9,19 @@ static struct window_context wcontext;
 
 void main_loop()
 {
-	char c;
+	//char c;
 	while (1) {		
 		redraw_scene();
 		
-		c = gfx_wait();
-		}
+		gfx_wait();
+	}
 }
 
 
 void *window_thread_fun(void *arg)
 {
 	start_scene();
-	start_graphics();
+	//start_graphics();
 	main_loop();
 }
 

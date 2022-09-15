@@ -1,13 +1,8 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <linux/limits.h>
-#include <ctype.h>
-#include <errno.h>
-#include <limits.h>
-#include "icli.h"
-#include "graphics.h"
+#ifndef INPUT_LIB
+#define INPUT_LIB 1
 
+#include "icli.h"
+//#include "graphics.h"
 
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
 
@@ -22,3 +17,5 @@ struct command_list
 };
 
 int pathfinder_register_commands(void);
+
+#endif

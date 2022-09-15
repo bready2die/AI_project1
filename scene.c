@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include "gfx.h"
 #include "window.h"
 #include "scene.h"
 
@@ -98,36 +99,14 @@ int delcircle(struct circle *circle)
 
 void drawgrid()
 {
-	int width = 510;
-	int height = 1010;
+	int width = WINWIDTH;
+	int height = WINHEIGHT;
         for (int i = 5; i < height; i += 10) {
 		struct line line = GRID_LINE(0,i,width,i);
-		/*
-		struct line line = {
-			.x1 = 0,
-			.y1 = i,
-			.x2 = width,
-			.y2 = i,
-			.r = 255,
-			.g = 0,
-			.b = 0,
-		};
-		*/
                 addline(&line);
         }
         for (int i = 5; i < width; i += 10) {
 		struct line line = GRID_LINE(i,0,i,height);
-		/*
-		struct line line = {
-			.x1 = i,
-			.y1 = 0,
-			.x2 = i,
-			.y2 = height,
-			.r = 255,
-			.g = 0,
-			.b = 0,
-		};
-		*/
                 addline(&line);
         }
 }
@@ -166,6 +145,19 @@ int redraw_scene()
 
 int start_scene()
 {
+        int ysize = WINHEIGHT;
+        int xsize = WINWIDTH;
+        // Open a new window for drawing.
+        gfx_open(xsize,ysize,"Example Graphics Program");
+
+        gfx_clear_color(BG_R,BG_G,BG_B);
+        gfx_clear();
+        // Set the current drawing color to green.
+        gfx_color(255,0,0);
+        //drawgrid();
+        gfx_flush();
+	
 	drawgrid();
+
 	return 0;
 }

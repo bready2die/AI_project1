@@ -2,7 +2,7 @@
 #define WINDOW_LIB 1
 
 #include <pthread.h>
-#include "graphics.h"
+//#include "graphics.h"
 //#include "scene.h"
 
 

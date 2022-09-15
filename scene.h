@@ -2,6 +2,13 @@
 #define SCENE_LIB 1
 #include "linux_list.h"
 
+#define WINHEIGHT 1010
+#define WINWIDTH 510
+
+#define BG_R 255
+#define BG_G 255
+#define BG_B 255
+
 #define GOAL_R 0
 #define GOAL_G 255
 #define GOAL_B 0
@@ -40,14 +47,14 @@ do {						\
 
 				
 #define GOAL_CIRCLE( _x, _y, _rad)				\
-({								\	                
+({								\
 	_MAKE_CIRCLE(__temp_circle,(_x),(_y),(_rad));		\
 	_COLOR_SHAPE(__temp_circle,GOAL_R,GOAL_G,GOAL_B);	\
 	__temp_circle;						\
 })
 
 #define START_CIRCLE( _x, _y, _rad)				\
-({								\	                
+({								\
 	_MAKE_CIRCLE(__temp_circle,(_x),(_y),(_rad));		\
 	_COLOR_SHAPE(__temp_circle,START_R,START_G,START_B);	\
 	__temp_circle;						\

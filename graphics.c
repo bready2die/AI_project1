@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 //#include "gfx.h"
-#include "graphics.h"
+//#include "graphics.h"
 /*
   struct point {
   int x;
@@ -30,6 +30,7 @@
   }
   }
 */
+/*
 int start_graphics()
 {
 	int ysize = WINHEIGHT;
@@ -47,7 +48,7 @@ int start_graphics()
 	//drawgrid();
 	gfx_flush();
 }
-
+*/
 /*
   void set_goal(int x, int y)
   {

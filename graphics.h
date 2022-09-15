@@ -7,12 +7,12 @@ by Prof. Thain
 #ifndef GRAPHICS_LIB
 #define GRAPHICS_LIB 1
 
-#include <stdio.h>
-#include "gfx.h"
-#define WINHEIGHT 1010
-#define WINWIDTH 510
-void drawgrid();
+//#include <stdio.h>
+//#include "gfx.h"
+//#define WINHEIGHT 1010
+//#define WINWIDTH 510
+//void drawgrid();
 
-int start_graphics();
+//int start_graphics();
 
 #endif
