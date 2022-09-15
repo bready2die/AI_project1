@@ -101,6 +101,8 @@ void drawgrid()
 	int width = 510;
 	int height = 1010;
         for (int i = 5; i < height; i += 10) {
+		struct line line = GRID_LINE(0,i,width,i);
+		/*
 		struct line line = {
 			.x1 = 0,
 			.y1 = i,
@@ -110,9 +112,12 @@ void drawgrid()
 			.g = 0,
 			.b = 0,
 		};
+		*/
                 addline(&line);
         }
         for (int i = 5; i < width; i += 10) {
+		struct line line = GRID_LINE(i,0,i,height);
+		/*
 		struct line line = {
 			.x1 = i,
 			.y1 = 0,
@@ -122,6 +127,7 @@ void drawgrid()
 			.g = 0,
 			.b = 0,
 		};
+		*/
                 addline(&line);
         }
 }
