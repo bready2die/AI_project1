@@ -56,6 +56,8 @@ static enum icli_ret goal_cmd(char **argv, int argc, void *context)
 				return ICLI_ERR;
 		}
 #ifdef TEST_CIRCLES
+		struct circle circle = GOAL_CIRCLE( 3 + ((int)x*10), 3 + ((int)y*10), 5);
+		/*
 		struct circle circle = {
 				.x = 3 + ((int)x*10),
 				.y = 3 + ((int)y*10),
@@ -64,6 +66,7 @@ static enum icli_ret goal_cmd(char **argv, int argc, void *context)
 				.g = 255,
 				.b = 0,
 		};
+		*/
 		if (goal_set)
 				delcircle(&goal_circle);
 		goal_set = 1;

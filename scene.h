@@ -2,7 +2,62 @@
 #define SCENE_LIB 1
 #include "linux_list.h"
 
+#define GOAL_R 0
+#define GOAL_G 255
+#define GOAL_B 0
 
+#define START_R 0
+#define START_G 0
+#define START_B 255
+
+#define GRID_R 255
+#define GRID_G 0
+#define GRID_B 0
+
+
+
+#define _COLOR_SHAPE(__shape, __r,__g,__b)			\
+				do {								\
+						__shape.r = (__r);			\
+						__shape.g = (__g);			\
+						__shape.b = (__b);			\
+				} while (0)
+
+
+
+
+#define _MAKE_CIRCLE(__name,__x,__y,__rad)					\
+				struct circle (__name) = {					\
+						.x = (__x),							\
+						.y = (__y),							\
+						.rad = (__rad),						\
+				}
+
+				
+#define GOAL_CIRCLE( _x, _y, _rad)							\
+({												            \	                
+		_MAKE_CIRCLE(__temp_circle,(_x),(_y),(_rad));       \					
+		_COLOR_SHAPE(__temp_circle,GOAL_R,GOAL_G,GOAL_B);   \
+		__temp_circle;									    \
+})
+
+#define START_CIRCLE( _x, _y, _rad)									\
+({												                    \	                
+		_MAKE_CIRCLE(__temp_circle,(_x),(_y),(_rad));				\
+		_COLOR_SHAPE(__temp_circle,START_R,START_G,START_B);	    \
+		__temp_circle;											    \
+})
+
+/*
+#define _MAKE_LINE(__name, __x1, __y1, __x2, __y2) \
+		struct line (__name) = {				   \
+				.x1 = (__x1),					   \
+				.y1 = (__y1),					   \
+				.x2 = (__x2),					   \
+				.y2 = (__y2),					   \
+		}
+
+*/
 struct point {
 		struct list_head list;
 		union {
