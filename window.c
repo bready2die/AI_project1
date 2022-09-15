@@ -7,29 +7,29 @@ static struct window_context wcontext;
 
 void main_loop()
 {
-		char c;
-		while (1) {		
-				redraw_scene();
-				
-				c = gfx_wait();
+	char c;
+	while (1) {		
+		redraw_scene();
+		
+		c = gfx_wait();
 		}
 }
 
 
 void *window_thread_fun(void *arg)
 {
-		start_scene();
-		start_graphics();
-		main_loop();
+	start_scene();
+	start_graphics();
+	main_loop();
 }
 
 
 
 int start_window()
 {
-		if (pthread_create(&window_thread,NULL,window_thread_fun,&wcontext)) {
-				printf("failed to create window thread\n");
-				return -1;
-		}
+	if (pthread_create(&window_thread,NULL,window_thread_fun,&wcontext)) {
+		printf("failed to create window thread\n");
+		return -1;
+	}
 		
 }

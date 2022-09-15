@@ -16,91 +16,98 @@
 
 
 
-#define _COLOR_SHAPE(__shape, __r,__g,__b)			\
-				do {								\
-						__shape.r = (__r);			\
-						__shape.g = (__g);			\
-						__shape.b = (__b);			\
-				} while (0)
+#define _COLOR_SHAPE(__shape, __r,__g,__b)	\
+do {						\
+	__shape.r = (__r);			\
+	__shape.g = (__g);			\
+	__shape.b = (__b);			\
+} while (0)
+	
 
 
-
-
-#define _MAKE_CIRCLE(__name,__x,__y,__rad)					\
-				struct circle (__name) = {					\
-						.x = (__x),							\
-						.y = (__y),							\
-						.rad = (__rad),						\
-				}
+#define _MAKE_CIRCLE(__name,__x,__y,__rad)	\
+	struct circle (__name) = {		\
+		.x = (__x),			\
+		.y = (__y),			\
+		.rad = (__rad),			\
+	}
 
 				
-#define GOAL_CIRCLE( _x, _y, _rad)							\
-({												            \	                
-		_MAKE_CIRCLE(__temp_circle,(_x),(_y),(_rad));       \					
-		_COLOR_SHAPE(__temp_circle,GOAL_R,GOAL_G,GOAL_B);   \
-		__temp_circle;									    \
+#define GOAL_CIRCLE( _x, _y, _rad)				\
+({								\	                
+	_MAKE_CIRCLE(__temp_circle,(_x),(_y),(_rad));		\
+	_COLOR_SHAPE(__temp_circle,GOAL_R,GOAL_G,GOAL_B);	\
+	__temp_circle;						\
 })
 
-#define START_CIRCLE( _x, _y, _rad)									\
-({												                    \	                
-		_MAKE_CIRCLE(__temp_circle,(_x),(_y),(_rad));				\
-		_COLOR_SHAPE(__temp_circle,START_R,START_G,START_B);	    \
-		__temp_circle;											    \
+#define START_CIRCLE( _x, _y, _rad)				\
+({								\	                
+	_MAKE_CIRCLE(__temp_circle,(_x),(_y),(_rad));		\
+	_COLOR_SHAPE(__temp_circle,START_R,START_G,START_B);	\
+	__temp_circle;						\
 })
 
-/*
-#define _MAKE_LINE(__name, __x1, __y1, __x2, __y2) \
-		struct line (__name) = {				   \
-				.x1 = (__x1),					   \
-				.y1 = (__y1),					   \
-				.x2 = (__x2),					   \
-				.y2 = (__y2),					   \
-		}
 
-*/
+
+#define _MAKE_LINE(__name, __x1, __y1, __x2, __y2)      \
+	struct line (__name) = {			\
+		  .x1 = (__x1),				\
+		  .y1 = (__y1),				\
+		  .x2 = (__x2),				\
+		  .y2 = (__y2),				\
+	  }
+
+#define BLOCKING_LINE(_x1, _y1, _x2, _y2)			\
+({								\
+	_MAKE_LINE(__temp_line,(_x1),(_y1),(_x2),(_y2));	\
+	_COLOR_SHAPE(__temp_line,START_R,START_G,START_B);	\
+	__temp_line;						\
+})
+
+
 struct point {
-		struct list_head list;
-		union {
-				struct {
-						int x;
-						int y;
-						char r;
-						char g;
-						char b;
-				}__attribute__((packed));;
-				char bytes[11];
-		};
+	struct list_head list;
+	union {
+		struct {
+			int x;
+			int y;
+			char r;
+			char g;
+			char b;
+		}__attribute__((packed));;
+		char bytes[11];
+	};
 };
 
 struct line {
-		struct list_head list;
-		union {
-				struct {
-						int x1;
-						int y1;
-						int x2;
-						int y2;
-						char r;
-						char g;
-						char b;
-				}__attribute__((packed));;
-				char bytes[19];
-		};
+	struct list_head list;
+	union {
+		struct {
+			int x1;
+			int y1;
+			int x2;
+			int y2;
+			char r;
+			char g;
+			char b;
+		}__attribute__((packed));;
+		char bytes[19];
+	};
 };
 
 struct circle {
-		struct list_head list;
-		union {
-				struct {
-						int x;
-						int y;
-						int rad;
-						char r;
-						char g;
-						char b;
-				}__attribute__((packed));
-				char bytes[15];
-		};
+	struct list_head list;
+	union {
+		struct {
+			int x;
+			int y;
+			int rad;
+			char r;
+			char g;
+			char b;
+		}__attribute__((packed));
+		char bytes[15];
+	};
 };
 
 
@@ -108,9 +115,9 @@ struct circle {
 //to take a deeper look at the screen context for whatever reason
 //no methods for passing it over yet, though
 struct scene_context {
-		struct list_head scene_lines;
-		struct list_head scene_points;
-		struct list_head scene_circles;
+	struct list_head scene_lines;
+	struct list_head scene_points;
+	struct list_head scene_circles;
 };
 
 int addline(struct line *line);

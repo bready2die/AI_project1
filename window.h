@@ -8,7 +8,7 @@
 
 
 struct window_context {
-		int update_pending:1;
+	int update_pending:1;
 };
 		
 //pthread_t window_thread;

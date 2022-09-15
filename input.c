@@ -29,121 +29,121 @@ static struct circle goal_circle;
 
 static int check_number(int val,int range)
 {
-		if ((errno == ERANGE && (val == LONG_MAX || val == LONG_MIN))
-			|| (errno != 0 && val == 0) || val > range || val < 0) {
-				perror("strtol");
-				return EXIT_FAILURE;
-		}
-		return 0;
+	if ((errno == ERANGE && (val == LONG_MAX || val == LONG_MIN))
+	    || (errno != 0 && val == 0) || val > range || val < 0) {
+		perror("strtol");
+		return EXIT_FAILURE;
+	}
+	return 0;
 }
 
 static enum icli_ret goal_cmd(char **argv, int argc, void *context)
 {
-		long x = 0;
-		long y = 0;
-		char *endptr;
-		errno = 0;
-		x = strtol(argv[0],&endptr,10);
-		if(check_number(x,100) || *endptr != '\0') {
-				icli_err_printf("Invalid or out of range x operand\n");
-				return ICLI_ERR;
-		}
-		endptr = NULL;
-		errno = 0;
-		y = strtol(argv[1],&endptr,10);
-		if(check_number(y,50) || *endptr != '\0') {
-				icli_err_printf("Invalid or out of range y operand\n");
-				return ICLI_ERR;
-		}
+	long x = 0;
+	long y = 0;
+	char *endptr;
+	errno = 0;
+	x = strtol(argv[0],&endptr,10);
+	if(check_number(x,100) || *endptr != '\0') {
+		icli_err_printf("Invalid or out of range x operand\n");
+		return ICLI_ERR;
+	}
+	endptr = NULL;
+	errno = 0;
+	y = strtol(argv[1],&endptr,10);
+	if(check_number(y,50) || *endptr != '\0') {
+		icli_err_printf("Invalid or out of range y operand\n");
+		return ICLI_ERR;
+	}
 #ifdef TEST_CIRCLES
-		struct circle circle = GOAL_CIRCLE( 3 + ((int)x*10), 3 + ((int)y*10), 5);
-		/*
-		struct circle circle = {
-				.x = 3 + ((int)x*10),
-				.y = 3 + ((int)y*10),
-				.rad = 5,
-				.r = 0,
-				.g = 255,
-				.b = 0,
-		};
-		*/
-		if (goal_set)
-				delcircle(&goal_circle);
-		goal_set = 1;
-		memcpy(&goal_circle,&circle,sizeof(struct circle));
-		addcircle(&circle);
-		redraw_scene();
+	struct circle circle = GOAL_CIRCLE( 3 + ((int)x*10), 3 + ((int)y*10), 5);
+	/*
+	  struct circle circle = {
+	  .x = 3 + ((int)x*10),
+	  .y = 3 + ((int)y*10),
+	  .rad = 5,
+	  .r = 0,
+	  .g = 255,
+	  .b = 0,
+	  };
+	*/
+	if (goal_set)
+		delcircle(&goal_circle);
+	goal_set = 1;
+	memcpy(&goal_circle,&circle,sizeof(struct circle));
+	addcircle(&circle);
+	redraw_scene();
 #endif
-		icli_printf("goal not yet implemented\n");
-		errno = 0;
+	icli_printf("goal not yet implemented\n");
+	errno = 0;
 		
-		return ICLI_OK;
+	return ICLI_OK;
 }
 
 static struct icli_arg goal_args[] = {
-		{.type=AT_None, .help="x value"},
-		{.type=AT_None, .help="y value"},
+	{.type=AT_None, .help="x value"},
+	{.type=AT_None, .help="y value"},
 };
 
 
 
 static struct icli_command_params goal_params = {
-		.parent = NULL,
-		.name = "goal",
-		.short_name = "goal",
-		.help = "set goal node",
-		.command = goal_cmd,
-		.argc = 2,
-		.argv = goal_args,
+	.parent = NULL,
+	.name = "goal",
+	.short_name = "goal",
+	.help = "set goal node",
+	.command = goal_cmd,
+	.argc = 2,
+	.argv = goal_args,
 };
 
 
 
 static enum icli_ret start_cmd(char **argv, int argc, void *context)
 {
-		long x = 0;
-		long y = 0;
-		char *endptr;
-		errno = 0;
-		x = strtol(argv[0],&endptr,10);
-		if (check_number(x,100) || *endptr != '\0') {
-				icli_err_printf("Invalid or out of range x operand\n");
-				return ICLI_ERR;
-		}
-		endptr = NULL;
-		errno = 0;
-		y = strtol(argv[1],&endptr,10);
-		if (check_number(y,50) || *endptr != '\0') {
-				icli_err_printf("Invalid or out of range y operand\n");
-				return ICLI_ERR;
-		}
-		icli_printf("start not yet implemented\n");
-		errno=0;
+	long x = 0;
+	long y = 0;
+	char *endptr;
+	errno = 0;
+	x = strtol(argv[0],&endptr,10);
+	if (check_number(x,100) || *endptr != '\0') {
+		icli_err_printf("Invalid or out of range x operand\n");
+		return ICLI_ERR;
+	}
+	endptr = NULL;
+	errno = 0;
+	y = strtol(argv[1],&endptr,10);
+	if (check_number(y,50) || *endptr != '\0') {
+		icli_err_printf("Invalid or out of range y operand\n");
+		return ICLI_ERR;
+	}
+	icli_printf("start not yet implemented\n");
+	errno=0;
 		
-		return ICLI_OK;
+	return ICLI_OK;
 }
 
 static struct icli_arg start_args[] = {
-		{.type=AT_None, .help="x value"},
-		{.type=AT_None, .help="y value"},
+	{.type=AT_None, .help="x value"},
+	{.type=AT_None, .help="y value"},
 };
 
 
 
 static struct icli_command_params start_params = {
-		.parent = NULL,
-		.name = "start",
-		.short_name = "start",
-		.help = "set start node",
-		.command = start_cmd,
-		.argc = 2,
-		.argv = start_args,
+	.parent = NULL,
+	.name = "start",
+	.short_name = "start",
+	.help = "set start node",
+	.command = start_cmd,
+	.argc = 2,
+	.argv = start_args,
 };
 
 
 struct command_list cmd_list[] = {
-		{"goal", &goal,&goal_params ,&goal_args, goal_cmd},
-		{"start", &start, &start_params, &start_args, start_cmd},
+	{"goal", &goal,&goal_params ,&goal_args, goal_cmd},
+	{"start", &start, &start_params, &start_args, start_cmd},
 };
 
 
