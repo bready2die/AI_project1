@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stfio.h>
 
 struct grid
 {
