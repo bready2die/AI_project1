@@ -77,6 +77,13 @@ do {						\
 	__temp_line;						\
 })
 
+#define GRID_LINE(_x1, _y1, _x2, _y2)				\
+({								\
+	_MAKE_LINE(__temp_line,(_x1),(_y1),(_x2),(_y2));	\
+	_COLOR_SHAPE(__temp_line,GRID_R,GRID_G,GRID_B);		\
+	__temp_line;						\
+})
+
 
 struct point {
 	struct list_head list;
