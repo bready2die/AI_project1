@@ -2,8 +2,17 @@
 #define SCENE_LIB 1
 #include "linux_list.h"
 
-#define WINHEIGHT 1010
-#define WINWIDTH 510
+//#define WINHEIGHT 1010
+//#define WINWIDTH 510
+
+#define  WIN_BORDER 5
+
+#define PX_PER_SPACE 10 //(((WINHEIGHT) - 2*(PX_PER_SPACE) / 50)
+
+#define WINHEIGHT ((2 * (WIN_BORDER)) + (PX_PER_SPACE) * 100)
+#define WINWIDTH ((2 * (WIN_BORDER)) + (PX_PER_SPACE) * 50)
+
+#define CIRCLE_RAD 4
 
 #define BG_R 255
 #define BG_G 255
@@ -101,7 +110,7 @@ struct point {
 			char r;
 			char g;
 			char b;
-		}__attribute__((packed));;
+		}__attribute__((packed));
 		char bytes[11];
 	};
 };
@@ -117,7 +126,7 @@ struct line {
 			char r;
 			char g;
 			char b;
-		}__attribute__((packed));;
+		}__attribute__((packed));
 		char bytes[19];
 	};
 };
@@ -147,6 +156,7 @@ struct scene_context {
 	struct list_head scene_circles;
 };
 
+
 int addline(struct line *line);
 
 int delline(struct line *line);
@@ -162,4 +172,6 @@ int delcircle(struct circle *circle);
 int start_scene();
 
 int redraw_scene();
+
+int clear_scene();
 #endif

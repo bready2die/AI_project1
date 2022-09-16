@@ -56,17 +56,8 @@ static enum icli_ret goal_cmd(char **argv, int argc, void *context)
 		return ICLI_ERR;
 	}
 #ifdef TEST_CIRCLES
-	struct circle circle = GOAL_CIRCLE( 3 + ((int)x*10), 3 + ((int)y*10), 5);
-	/*
-	  struct circle circle = {
-	  .x = 3 + ((int)x*10),
-	  .y = 3 + ((int)y*10),
-	  .rad = 5,
-	  .r = 0,
-	  .g = 255,
-	  .b = 0,
-	  };
-	*/
+	//struct circle circle = GOAL_CIRCLE( 3 +((int)x*10), 3 + ((int)y*10), 5);
+	struct circle circle = GOAL_CIRCLE( (int)x,(int)y, CIRCLE_RAD);
 	if (goal_set)
 		delcircle(&goal_circle);
 	goal_set = 1;
@@ -140,6 +131,25 @@ static struct icli_command_params start_params = {
 	.argv = start_args,
 };
 
+
+static enum icli_ret clear_cmd(char **argv, int argc, void *context)
+{
+	icli_printf("clearing board...\n");
+	
+	return ICLI_OK;
+}
+
+//static struct icli_arg clear_args[] = NULL;
+
+static struct icli_command_params clear_params = {
+	.parent = NULL,
+	.name = "clear",
+	.short_name = "clear",
+	.help = "clear entire board",
+	.command = clear_cmd,
+	.argc = 0,
+	.argv = NULL,
+};
 
 struct command_list cmd_list[] = {
 	{"goal", &goal,&goal_params ,&goal_args, goal_cmd},
