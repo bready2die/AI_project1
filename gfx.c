@@ -14,7 +14,7 @@ Version 2, 9/23/2011 - Fixes a bug that could result in jerky animation.
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "scene.h"
 #include "gfx.h"
 
 /*
@@ -38,12 +38,12 @@ static int saved_ypos = 0;
 
 
 XSizeHints sizehints = {
-	.min_width = 510,
-	.min_height = 1010,
-	.max_width = 510,
-	.max_height = 1010,
-	.base_width = 510,
-	.base_height = 1010,
+	.min_width = WINWIDTH,
+	.min_height = WINHEIGHT,
+	.max_width = WINWIDTH,
+	.max_height = WINHEIGHT,
+	.base_width = WINWIDTH,
+	.base_height = WINHEIGHT,
 	.win_gravity = StaticGravity,
 };
 /* Open a new graphics window. */

@@ -198,10 +198,8 @@ int clear_scene()
 
 int start_scene()
 {
-        int ysize = WINHEIGHT;
-        int xsize = WINWIDTH;
         // Open a new window for drawing.
-        gfx_open(xsize,ysize,"Example Graphics Program");
+        gfx_open(WINWIDTH,WINHEIGHT,"Example Graphics Program");
 
         gfx_clear_color(BG_R,BG_G,BG_B);
         gfx_clear();
