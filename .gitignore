@@ -2,5 +2,7 @@
 cli.log
 icli_history
 path.dot
-#*#
+path_finder
 *~
+\#*\#
+.\#*

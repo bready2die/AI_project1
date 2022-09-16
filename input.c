@@ -44,14 +44,14 @@ static enum icli_ret goal_cmd(char **argv, int argc, void *context)
 	char *endptr;
 	errno = 0;
 	x = strtol(argv[0],&endptr,10);
-	if(check_number(x,100) || *endptr != '\0') {
+	if(check_number(x,GRID_HEIGHT) || *endptr != '\0') {
 		icli_err_printf("Invalid or out of range x operand\n");
 		return ICLI_ERR;
 	}
 	endptr = NULL;
 	errno = 0;
 	y = strtol(argv[1],&endptr,10);
-	if(check_number(y,50) || *endptr != '\0') {
+	if(check_number(y,GRID_WIDTH) || *endptr != '\0') {
 		icli_err_printf("Invalid or out of range y operand\n");
 		return ICLI_ERR;
 	}
@@ -97,14 +97,14 @@ static enum icli_ret start_cmd(char **argv, int argc, void *context)
 	char *endptr;
 	errno = 0;
 	x = strtol(argv[0],&endptr,10);
-	if (check_number(x,100) || *endptr != '\0') {
+	if (check_number(x,GRID_HEIGHT) || *endptr != '\0') {
 		icli_err_printf("Invalid or out of range x operand\n");
 		return ICLI_ERR;
 	}
 	endptr = NULL;
 	errno = 0;
 	y = strtol(argv[1],&endptr,10);
-	if (check_number(y,50) || *endptr != '\0') {
+	if (check_number(y,GRID_WIDTH) || *endptr != '\0') {
 		icli_err_printf("Invalid or out of range y operand\n");
 		return ICLI_ERR;
 	}
