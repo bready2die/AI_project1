@@ -33,23 +33,24 @@ int delline(struct line *line)
 {
 	struct list_head *i, *tmp;
 	struct line *cur;
-	struct line *newline = malloc(sizeof(*newline));
-	memcpy(newline,line,sizeof( *line));
-	newline->x1 = (WIN_BORDER + (PX_PER_SPACE * newline->x1));
-	newline->y1 = (WIN_BORDER + (PX_PER_SPACE * newline->y1));
-	newline->x2 = (WIN_BORDER + (PX_PER_SPACE * newline->x2));
-	newline->y2 = (WIN_BORDER + (PX_PER_SPACE * newline->y2));
+	//struct line *newline = malloc(sizeof(*newline));
+	struct line newline;
+	memcpy(&newline,line,sizeof( *line));
+	newline.x1 = (WIN_BORDER + (PX_PER_SPACE * newline.x1));
+	newline.y1 = (WIN_BORDER + (PX_PER_SPACE * newline.y1));
+	newline.x2 = (WIN_BORDER + (PX_PER_SPACE * newline.x2));
+	newline.y2 = (WIN_BORDER + (PX_PER_SPACE * newline.y2));
 	pthread_mutex_lock(&scene_lock);
 	list_for_each_safe(i,tmp,&_scene_lines) {
 		cur = list_entry(i,struct line,list);
-		if (!memcmp(newline->bytes,cur->bytes,19)) {
+		if (!memcmp(newline.bytes,cur->bytes,19)) {
 			list_del(i);
 			free(cur);
 			break;
 		}
 	}
 	pthread_mutex_unlock(&scene_lock);
-	free(newline);
+	//free(newline);
 	return 0;
 }
 
@@ -71,21 +72,22 @@ int delpoint(struct point *point)
 {
 	struct list_head *i, *tmp;
 	struct point *cur;
-	struct point *newpoint = malloc(sizeof(*newpoint));
-	memcpy(newpoint,point,sizeof(*point));
-	newpoint->x = (WIN_BORDER + (PX_PER_SPACE * newpoint->x));
-	newpoint->y = (WIN_BORDER + (PX_PER_SPACE * newpoint->y));
+	//struct point *newpoint = malloc(sizeof(*newpoint));
+	struct point newpoint;
+	memcpy(&newpoint,point,sizeof(*point));
+	newpoint.x = (WIN_BORDER + (PX_PER_SPACE * newpoint.x));
+	newpoint.y = (WIN_BORDER + (PX_PER_SPACE * newpoint.y));
 	pthread_mutex_lock(&scene_lock);
 	list_for_each_safe(i,tmp,&_scene_points) {
 		cur = list_entry(i,struct point,list);
-		if (!memcmp(newpoint->bytes,cur->bytes,11)) {
+		if (!memcmp(newpoint.bytes,cur->bytes,11)) {
 			list_del(i);
 			free(cur);
 			break;
 		}
 	}
 	pthread_mutex_unlock(&scene_lock);
-	free(newpoint);
+	//free(newpoint);
 	return 0;
 }
 
@@ -93,8 +95,8 @@ int addcircle(struct circle *circle)
 {
 	struct circle *newcircle = malloc(sizeof(*newcircle));
 	memcpy(newcircle,circle,sizeof(*circle));
-	newcircle->x = (WIN_BORDER + (PX_PER_SPACE * newcircle->x) - (CIRCLE_RAD));
-	newcircle->y = (WIN_BORDER + (PX_PER_SPACE * newcircle->y) - (CIRCLE_RAD));
+	newcircle->x = (WIN_BORDER + (PX_PER_SPACE * newcircle->x) - (newcircle->rad));
+	newcircle->y = (WIN_BORDER + (PX_PER_SPACE * newcircle->y) - (newcircle->rad));
 	pthread_mutex_lock(&scene_lock);
 	list_add(&newcircle->list,&_scene_circles);
 	pthread_mutex_unlock(&scene_lock);
@@ -117,21 +119,22 @@ int delcircle(struct circle *circle)
 {
 	struct list_head *i, *tmp;
 	struct circle *cur;
-	struct circle *newcircle = malloc(sizeof(*newcircle));
-	memcpy(newcircle,circle,sizeof(*circle));
-	newcircle->x = (WIN_BORDER + (PX_PER_SPACE * newcircle->x) - (CIRCLE_RAD));
-	newcircle->y = (WIN_BORDER + (PX_PER_SPACE * newcircle->y) - (CIRCLE_RAD));
+	//struct circle *newcircle = malloc(sizeof(*newcircle));
+	struct circle newcircle;
+	memcpy(&newcircle,circle,sizeof(*circle));
+	newcircle.x = (WIN_BORDER + (PX_PER_SPACE * newcircle.x) - (newcircle.rad));
+	newcircle.y = (WIN_BORDER + (PX_PER_SPACE * newcircle.y) - (newcircle.rad));
 	pthread_mutex_lock(&scene_lock);
 	list_for_each_safe(i,tmp,&_scene_circles) {
 		cur = list_entry(i,struct circle,list);
-		if (!memcmp(newcircle->bytes,cur->bytes,15)) {
+		if (!memcmp(newcircle.bytes,cur->bytes,15)) {
 			list_del(i);
 			free(cur);
 			break;
 		}
 	}
 	pthread_mutex_unlock(&scene_lock);
-	free(newcircle);
+	//free(newcircle);
 	return 0;
 }
 
