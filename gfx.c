@@ -116,7 +116,7 @@ void gfx_line( int x1, int y1, int x2, int y2 )
 
 void gfx_circle(int x, int y, int rad)
 {
-	XDrawArc(gfx_display,gfx_window,gfx_gc,x,y,rad,rad,0,360*64);
+	XDrawArc(gfx_display,gfx_window,gfx_gc,x,y,2*rad,2*rad,0,360*64);
 }
 
 /* Change the current drawing color. */

@@ -74,26 +74,45 @@ int addcircle(struct circle *circle)
 {
 	struct circle *newcircle = malloc(sizeof(*newcircle));
 	memcpy(newcircle,circle,sizeof(*circle));
+	newcircle->x=((PX_PER_SPACE*newcircle->x)+(CIRCLE_RAD/2));
+	newcircle->y=((PX_PER_SPACE*newcircle->y)+(CIRCLE_RAD/2));
 	pthread_mutex_lock(&scene_lock);
 	list_add(&newcircle->list,&_scene_circles);
 	pthread_mutex_unlock(&scene_lock);
 	return 0;
 }
 
+/*
+int addcircle(int x, int y, int rad, char r, char g, char b)
+{
+	struct circle circle = GOAL_CIRCLE( 3 +((int)x*10), 3 + ((int)y*10), 5);
+	struct circle *newcircle = malloc(sizeof(*newcircle));
+	memcpy(newcircle,circle,sizeof(*circle));
+	pthread_mutex_lock(&scene_lock);
+	list_add(&newcircle->list,&_scene_circles);
+	pthread_mutex_unlock(&scene_lock);
+	return 0;
+}
+*/
 int delcircle(struct circle *circle)
 {
 	struct list_head *i, *tmp;
 	struct circle *cur;
+	struct circle *newcircle = malloc(sizeof(*newcircle));
+	memcpy(newcircle,circle,sizeof(*circle));
+	newcircle->x=((PX_PER_SPACE*newcircle->x)+(CIRCLE_RAD/2));
+	newcircle->y=((PX_PER_SPACE*newcircle->y)+(CIRCLE_RAD/2));
 	pthread_mutex_lock(&scene_lock);
 	list_for_each_safe(i,tmp,&_scene_circles) {
 		cur = list_entry(i,struct circle,list);
-		if (!memcmp(circle->bytes,cur->bytes,15)) {
+		if (!memcmp(newcircle->bytes,cur->bytes,15)) {
 			list_del(i);
 			free(cur);
 			break;
 		}
 	}
 	pthread_mutex_unlock(&scene_lock);
+	free(newcircle);
 	return 0;
 }
 
@@ -141,6 +160,11 @@ int redraw_scene()
 	gfx_flush();
 	pthread_mutex_unlock(&scene_lock);
 	return 0;
+}
+
+int clear_scene()
+{
+	
 }
 
 int start_scene()
