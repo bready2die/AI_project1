@@ -1010,11 +1010,14 @@ int icli_init(struct icli_params *params)
 
     struct icli_arg execute_args[] = {{.type = AT_File, .help = "File to read commands from"}};
     struct icli_command_params cmd_params[] = {{.name = "quit", .command = icli_quit, .help = "Quit interactive shell"},
+    /*
                                                {.name = "execute",
                                                 .command = icli_execute,
                                                 .help = "Execute commands from file",
                                                 .argc = 1,
-                                                .argv = execute_args}};
+                                                .argv = execute_args}
+                                                */
+                                                };
     struct icli_command *commands[array_len(cmd_params)] = {};
     ret = icli_register_commands(cmd_params, commands, array_len(cmd_params));
     if (ret) {
