@@ -18,6 +18,10 @@ int addline(struct line *line)
 {
 	struct line *newline = malloc(sizeof(*newline));
 	memcpy(newline,line,sizeof( *line));
+	newline->x1 = (WIN_BORDER + (PX_PER_SPACE * newline->x1));
+	newline->y1 = (WIN_BORDER + (PX_PER_SPACE * newline->y1));
+	newline->x2 = (WIN_BORDER + (PX_PER_SPACE * newline->x2));
+	newline->y2 = (WIN_BORDER + (PX_PER_SPACE * newline->y2));
 	pthread_mutex_lock(&scene_lock);
 	list_add(&newline->list,&_scene_lines);
 	pthread_mutex_unlock(&scene_lock);
@@ -29,16 +33,23 @@ int delline(struct line *line)
 {
 	struct list_head *i, *tmp;
 	struct line *cur;
+	struct line *newline = malloc(sizeof(*newline));
+	memcpy(newline,line,sizeof( *line));
+	newline->x1 = (WIN_BORDER + (PX_PER_SPACE * newline->x1));
+	newline->y1 = (WIN_BORDER + (PX_PER_SPACE * newline->y1));
+	newline->x2 = (WIN_BORDER + (PX_PER_SPACE * newline->x2));
+	newline->y2 = (WIN_BORDER + (PX_PER_SPACE * newline->y2));
 	pthread_mutex_lock(&scene_lock);
 	list_for_each_safe(i,tmp,&_scene_lines) {
 		cur = list_entry(i,struct line,list);
-		if (!memcmp(line->bytes,cur->bytes,19)) {
+		if (!memcmp(newline->bytes,cur->bytes,19)) {
 			list_del(i);
 			free(cur);
 			break;
 		}
 	}
 	pthread_mutex_unlock(&scene_lock);
+	free(newline);
 	return 0;
 }
 
@@ -46,6 +57,9 @@ int delline(struct line *line)
 int addpoint(struct point *point)
 {
 	struct point *newpoint = malloc(sizeof(*newpoint));
+	memcpy(newpoint,point,sizeof(*point));
+	newpoint->x = (WIN_BORDER + (PX_PER_SPACE * newpoint->x));
+	newpoint->y = (WIN_BORDER + (PX_PER_SPACE * newpoint->y));
 	memcpy(newpoint,point,sizeof( *point));
 	pthread_mutex_lock(&scene_lock);
 	list_add(&newpoint->list,&_scene_points);
@@ -57,16 +71,21 @@ int delpoint(struct point *point)
 {
 	struct list_head *i, *tmp;
 	struct point *cur;
+	struct point *newpoint = malloc(sizeof(*newpoint));
+	memcpy(newpoint,point,sizeof(*point));
+	newpoint->x = (WIN_BORDER + (PX_PER_SPACE * newpoint->x));
+	newpoint->y = (WIN_BORDER + (PX_PER_SPACE * newpoint->y));
 	pthread_mutex_lock(&scene_lock);
 	list_for_each_safe(i,tmp,&_scene_points) {
 		cur = list_entry(i,struct point,list);
-		if (!memcmp(point->bytes,cur->bytes,11)) {
+		if (!memcmp(newpoint->bytes,cur->bytes,11)) {
 			list_del(i);
 			free(cur);
 			break;
 		}
 	}
 	pthread_mutex_unlock(&scene_lock);
+	free(newpoint);
 	return 0;
 }
 
@@ -118,16 +137,26 @@ int delcircle(struct circle *circle)
 
 void drawgrid()
 {
-	int width = WINWIDTH;
-	int height = WINHEIGHT;
-        for (int i = 5; i < height; i += 10) {
+	//int width = WINWIDTH;
+	//int height = WINHEIGHT;
+	for (int i = 0; i < GRID_HEIGHT+1; i++) {
+		struct line line = GRID_LINE(0,i,GRID_WIDTH,i);
+                addline(&line);
+        }
+        for (int i = 0; i < GRID_WIDTH+1; i++) {
+		struct line line = GRID_LINE(i,0,i,GRID_HEIGHT);
+                addline(&line);
+        }
+	/*
+        for (int i = WIN_BORDER; i < height; i += PX_PER_SPACE) {
 		struct line line = GRID_LINE(0,i,width,i);
                 addline(&line);
         }
-        for (int i = 5; i < width; i += 10) {
+        for (int i = WIN_BORDER; i < width; i += PX_PER_SPACE) {
 		struct line line = GRID_LINE(i,0,i,height);
                 addline(&line);
         }
+	*/
 }
 
 int redraw_scene()

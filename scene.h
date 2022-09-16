@@ -4,13 +4,15 @@
 
 //#define WINHEIGHT 1010
 //#define WINWIDTH 510
+#define GRID_HEIGHT 100
+#define GRID_WIDTH 50
 
-#define  WIN_BORDER 5
+#define WIN_BORDER 5
 
 #define PX_PER_SPACE 10 //(((WINHEIGHT) - 2*(PX_PER_SPACE) / 50)
 
-#define WINHEIGHT ((2 * (WIN_BORDER)) + (PX_PER_SPACE) * 100)
-#define WINWIDTH ((2 * (WIN_BORDER)) + (PX_PER_SPACE) * 50)
+#define WINHEIGHT ((2 * (WIN_BORDER)) + (PX_PER_SPACE) * (GRID_HEIGHT))
+#define WINWIDTH ((2 * (WIN_BORDER)) + (PX_PER_SPACE) * (GRID_WIDTH))
 
 #define CIRCLE_RAD 4
 
