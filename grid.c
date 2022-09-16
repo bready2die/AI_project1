@@ -1,11 +1,16 @@
 #include <stdlib.h>
-#include <stfio.h>
+#include <stdio.h>
+#include "linux_list.h"
+
+//NOTE: NONE of this has been bug tested.
+
 
 struct grid
 {
-	int width, height, startX, startY, goalX, goalY;
-	char* blocks; //grid noting blocked tiles. 
-	//path data may or may not be stored here, tbd
+	int width, height;
+	struct coords start, goal;
+	char* blocks; //grid noting blocked tiles.
+	struct list_head vertex_list;
 }
 
 struct coords
@@ -19,6 +24,9 @@ struct vertex // this setup may change, maybe
 	float g; //distance from start, following path
 	float h; //heuristic (estimated distance from vertex to goal)
 	struct vertex* parent;
+	struct list_head list;
+
+	//store lines for scene here? (this to parent, most likely)
 }
 
 int read_file(struct grid* grid, char* filename)
@@ -31,8 +39,8 @@ int read_file(struct grid* grid, char* filename)
 		return 1;
 	}
 	//int count; Maybe I'll add error handling later
-	fscanf(file, "%d %d ", &(grid->startX), &(grid->startY));
-	fscanf(file, "%d %d ", &(grid->goalX), &(grid->goalY));
+	fscanf(file, "%d %d ", &(grid->start.x), &(grid->start.y));
+	fscanf(file, "%d %d ", &(grid->goal.x), &(grid->goal.y));
 	fscanf(file, "%d %d ", &(grid->width), &(grid->height));
 	
 	grid->blocks = malloc(sizeof(char)*grid->width*grid->height);
@@ -48,6 +56,9 @@ int read_file(struct grid* grid, char* filename)
 			grid->blocks[buf1*(grid->height) + buf2] = buf3;
 		}
 	}
+
+	//init start vertex, I guess?
+	grid->vertex_list = LIST_START_INIT(grid->vertex_list);
 
 	if (fclose(file))
 	return 0;
@@ -108,9 +119,26 @@ static int succ(struct grid* grid, struct coords pos, struct coords* buffer) //r
 	return count;
 }
 
+void clear_vertex_list (struct grid* grid)
+{
+	struct list_head* i;
+	struct list_head* buf;
+	struct vertex* v;
+
+	list_for_each_safe(i, buf, &(grid->vertex_list))
+	{
+		v = list_entry(i, struct vertex, list);
+		list_del(i);
+		//finish any vertex related business here, maybe clear scene lines
+		free(v);
+	}
+	//TODO
+}
+
 void close_grid(struct grid* grid)//note:does not free the pointer itself
 {
 	free(grid->blocks);
+	clear_vertex_list(grid);
 }
 
 
