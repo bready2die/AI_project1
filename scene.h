@@ -175,5 +175,5 @@ int start_scene();
 
 int redraw_scene();
 
-int clear_scene();
+//int clear_scene();
 #endif

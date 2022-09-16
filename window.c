@@ -23,6 +23,7 @@ void *window_thread_fun(void *arg)
 	start_scene();
 	//start_graphics();
 	main_loop();
+	return NULL;
 }
 
 
@@ -33,5 +34,5 @@ int start_window()
 		printf("failed to create window thread\n");
 		return -1;
 	}
-		
+	return 0;
 }

@@ -190,12 +190,12 @@ int redraw_scene()
 	pthread_mutex_unlock(&scene_lock);
 	return 0;
 }
-
+/*
 int clear_scene()
 {
 	
 }
-
+*/
 int start_scene()
 {
         // Open a new window for drawing.
