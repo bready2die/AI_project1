@@ -74,8 +74,8 @@ int addcircle(struct circle *circle)
 {
 	struct circle *newcircle = malloc(sizeof(*newcircle));
 	memcpy(newcircle,circle,sizeof(*circle));
-	newcircle->x=((PX_PER_SPACE*newcircle->x)+(CIRCLE_RAD/2));
-	newcircle->y=((PX_PER_SPACE*newcircle->y)+(CIRCLE_RAD/2));
+	newcircle->x = (WIN_BORDER + (PX_PER_SPACE * newcircle->x) - (CIRCLE_RAD));
+	newcircle->y = (WIN_BORDER + (PX_PER_SPACE * newcircle->y) - (CIRCLE_RAD));
 	pthread_mutex_lock(&scene_lock);
 	list_add(&newcircle->list,&_scene_circles);
 	pthread_mutex_unlock(&scene_lock);
@@ -100,8 +100,8 @@ int delcircle(struct circle *circle)
 	struct circle *cur;
 	struct circle *newcircle = malloc(sizeof(*newcircle));
 	memcpy(newcircle,circle,sizeof(*circle));
-	newcircle->x=((PX_PER_SPACE*newcircle->x)+(CIRCLE_RAD/2));
-	newcircle->y=((PX_PER_SPACE*newcircle->y)+(CIRCLE_RAD/2));
+	newcircle->x = (WIN_BORDER + (PX_PER_SPACE * newcircle->x) - (CIRCLE_RAD));
+	newcircle->y = (WIN_BORDER + (PX_PER_SPACE * newcircle->y) - (CIRCLE_RAD));
 	pthread_mutex_lock(&scene_lock);
 	list_for_each_safe(i,tmp,&_scene_circles) {
 		cur = list_entry(i,struct circle,list);
