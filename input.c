@@ -8,6 +8,9 @@
 #include "input.h"
 #include "scene.h"
 
+//extern int grid_width;
+//extern int grid_height;
+
 #define TEST_CIRCLES 1
 
 static struct icli_command *goal;
@@ -19,7 +22,8 @@ static struct icli_command *clearblock;
 static struct icli_command *weight;
 static struct icli_command *run;
 static struct icli_command *runfile;
-static struct icli_command *exit_sim;
+static struct icli_command *resize;
+//static struct icli_command *exit_sim;
 
 #ifdef TEST_CIRCLES
 static int goal_set = 0;
@@ -44,14 +48,14 @@ static enum icli_ret goal_cmd(char **argv, int argc, void *context)
 	char *endptr;
 	errno = 0;
 	x = strtol(argv[0],&endptr,10);
-	if(check_number(x,GRID_HEIGHT) || *endptr != '\0') {
+	if(check_number(x,grid_width) || *endptr != '\0') {
 		icli_err_printf("Invalid or out of range x operand\n");
 		return ICLI_ERR;
 	}
 	endptr = NULL;
 	errno = 0;
 	y = strtol(argv[1],&endptr,10);
-	if(check_number(y,GRID_WIDTH) || *endptr != '\0') {
+	if(check_number(y,grid_height) || *endptr != '\0') {
 		icli_err_printf("Invalid or out of range y operand\n");
 		return ICLI_ERR;
 	}
@@ -97,14 +101,14 @@ static enum icli_ret start_cmd(char **argv, int argc, void *context)
 	char *endptr;
 	errno = 0;
 	x = strtol(argv[0],&endptr,10);
-	if (check_number(x,GRID_HEIGHT) || *endptr != '\0') {
+	if (check_number(x,grid_width) || *endptr != '\0') {
 		icli_err_printf("Invalid or out of range x operand\n");
 		return ICLI_ERR;
 	}
 	endptr = NULL;
 	errno = 0;
 	y = strtol(argv[1],&endptr,10);
-	if (check_number(y,GRID_WIDTH) || *endptr != '\0') {
+	if (check_number(y,grid_height) || *endptr != '\0') {
 		icli_err_printf("Invalid or out of range y operand\n");
 		return ICLI_ERR;
 	}
@@ -151,9 +155,53 @@ static struct icli_command_params clear_params = {
 	.argv = NULL,
 };
 
+static enum icli_ret resize_cmd(char **argv, int argc, void *context)
+{
+	int x,y;
+	char *endptr;
+	errno = 0;
+	x = strtol(argv[0],&endptr,10);
+	if (check_number(x,MAX_GRID_WIDTH) || *endptr != '\0') {
+		icli_err_printf("x operand invalid value or larger than max of %d\n",MAX_GRID_WIDTH);
+		return ICLI_ERR;
+	}
+	endptr = NULL;
+	errno = 0;
+	y = strtol(argv[1],&endptr,10);
+	if (check_number(y,MAX_GRID_HEIGHT) || *endptr != '\0') {
+		icli_err_printf("y operand invalid value or larger than max of %d\n",MAX_GRID_HEIGHT);
+		return ICLI_ERR;
+	}
+        icli_printf("resizing window...\n");
+	//this line will be moved into grid.c when it's ready
+	resize_window((2 * WIN_BORDER) + (PX_PER_SPACE * x), (2 * WIN_BORDER) + (PX_PER_SPACE * x));
+		
+	return ICLI_OK;
+}
+
+static struct icli_arg resize_args[] = {
+	{.type=AT_None, .help="x value"},
+	{.type=AT_None, .help="y value"},
+};
+
+
+
+static struct icli_command_params resize_params = {
+	.parent = NULL,
+	.name = "resize",
+	.short_name = "resize",
+	.help = "resize grid",
+	.command = resize_cmd,
+	.argc = 2,
+	.argv = resize_args,
+};
+
+
 struct command_list cmd_list[] = {
 	{"goal", &goal,&goal_params ,&goal_args, goal_cmd},
 	{"start", &start, &start_params, &start_args, start_cmd},
+	{"clear", &clear,&clear_params,NULL,clear_cmd},
+	{"resize",&resize,&resize_params,&resize_args,resize_cmd},
 };
 
 

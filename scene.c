@@ -4,6 +4,10 @@
 #include "window.h"
 #include "scene.h"
 
+int grid_width=DEF_GRID_WIDTH;
+
+int grid_height=DEF_GRID_HEIGHT;
+
 struct scene_context main_scene;
 
 pthread_mutex_t scene_lock = PTHREAD_MUTEX_INITIALIZER;
@@ -142,12 +146,12 @@ void drawgrid()
 {
 	//int width = WINWIDTH;
 	//int height = WINHEIGHT;
-	for (int i = 0; i < GRID_HEIGHT+1; i++) {
-		struct line line = GRID_LINE(0,i,GRID_WIDTH,i);
+	for (int i = 0; i < grid_height+1; i++) {
+		struct line line = GRID_LINE(0,i,grid_width,i);
                 addline(&line);
         }
-        for (int i = 0; i < GRID_WIDTH+1; i++) {
-		struct line line = GRID_LINE(i,0,i,GRID_HEIGHT);
+        for (int i = 0; i < grid_width+1; i++) {
+		struct line line = GRID_LINE(i,0,i,grid_height);
                 addline(&line);
         }
 	/*
@@ -199,6 +203,14 @@ int clear_scene()
 	
 }
 */
+
+int resize_window(int x, int y)
+{
+	
+	gfx_resize_window(x,y);
+	gfx_flush();
+}
+
 int start_scene()
 {
         // Open a new window for drawing.

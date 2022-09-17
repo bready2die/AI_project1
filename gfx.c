@@ -38,12 +38,12 @@ static int saved_ypos = 0;
 
 
 XSizeHints sizehints = {
-	.min_width = WINWIDTH,
-	.min_height = WINHEIGHT,
-	.max_width = WINWIDTH,
-	.max_height = WINHEIGHT,
-	.base_width = WINWIDTH,
-	.base_height = WINHEIGHT,
+	//.min_width = DEF_WINWIDTH,
+	//.min_height = DEF_WINHEIGHT,
+	//.max_width = WINWIDTH,
+	//.max_height = WINHEIGHT,
+	//.base_width = WINWIDTH,
+	//.base_height = WINHEIGHT,
 	.win_gravity = StaticGravity,
 };
 /* Open a new graphics window. */
@@ -147,6 +147,8 @@ void gfx_clear()
 	XClearWindow(gfx_display,gfx_window);
 }
 
+
+
 /* Change the current background color. */
 
 void gfx_clear_color( int r, int g, int b )
@@ -161,6 +163,12 @@ void gfx_clear_color( int r, int g, int b )
 	XSetWindowAttributes attr;
 	attr.background_pixel = color.pixel;
 	XChangeWindowAttributes(gfx_display,gfx_window,CWBackPixel,&attr);
+}
+
+
+void gfx_resize_window(int x, int y)
+{
+	XResizeWindow(gfx_display,gfx_window,x,y);
 }
 
 int gfx_event_waiting()

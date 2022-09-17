@@ -4,15 +4,24 @@
 
 //#define WINHEIGHT 1010
 //#define WINWIDTH 510
-#define GRID_HEIGHT 100
-#define GRID_WIDTH 50
+
+extern int grid_width;
+
+extern int grid_height;
+
+#define MAX_GRID_HEIGHT 100
+
+#define MAX_GRID_WIDTH 50
+
+#define DEF_GRID_HEIGHT MAX_GRID_HEIGHT
+#define DEF_GRID_WIDTH MAX_GRID_WIDTH
 
 #define WIN_BORDER 5
 
 #define PX_PER_SPACE 10 //(((WINHEIGHT) - 2*(PX_PER_SPACE) / 50)
 
-#define WINHEIGHT ((2 * (WIN_BORDER)) + (PX_PER_SPACE) * (GRID_HEIGHT))
-#define WINWIDTH ((2 * (WIN_BORDER)) + (PX_PER_SPACE) * (GRID_WIDTH))
+#define WINHEIGHT ((2 * (WIN_BORDER)) + (PX_PER_SPACE) * grid_height)
+#define WINWIDTH ((2 * (WIN_BORDER)) + (PX_PER_SPACE) * grid_width)
 
 #define CIRCLE_RAD 4
 
@@ -39,6 +48,7 @@
 #define PATH_R 255
 #define PATH_G 0
 #define PATH_B 255
+
 
 #define _COLOR_SHAPE(__shape, __r,__g,__b)	\
 do {						\
@@ -175,5 +185,6 @@ int start_scene();
 
 int redraw_scene();
 
+int resize_window(int x, int y);
 //int clear_scene();
 #endif
