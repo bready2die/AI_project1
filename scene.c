@@ -3,6 +3,7 @@
 #include "gfx.h"
 #include "window.h"
 #include "scene.h"
+//both grid_width and grid_height should be moved into graph.c when it is ready for testing
 
 int grid_width=DEF_GRID_WIDTH;
 
@@ -219,7 +220,6 @@ int redraw_scene()
 	struct rect *rcur;
 
 	gfx_clear();
-	gfx_flush();
 
 	pthread_mutex_lock(&scene_lock);
 	list_for_each(irect,&_scene_rects) {

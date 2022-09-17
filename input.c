@@ -18,7 +18,7 @@ static struct icli_command *start;
 static struct icli_command *block;
 static struct icli_command *unblock;
 static struct icli_command *clear;
-static struct icli_command *weight;
+static struct icli_command *get_values;
 static struct icli_command *run;
 static struct icli_command *runfile;
 static struct icli_command *resize;
@@ -85,13 +85,13 @@ static struct icli_arg goal_args[] = {
 
 
 static struct icli_command_params goal_params = {
-	.parent     = NULL,
-	.name       = "goal",
-	.short_name = "goal",
-	.help       = "set goal node",
-	.command    = goal_cmd,
-	.argc       = 2,
-	.argv       = goal_args,
+	.parent     =   NULL,
+	.name       =   "goal",
+	.short_name =   "goal",
+	.help       =   "set goal node",
+	.command    =   goal_cmd,
+	.argc       =   2,
+	.argv       =   goal_args,
 };
 
 

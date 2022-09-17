@@ -7,12 +7,20 @@ extern int grid_width;
 
 extern int grid_height;
 
+
+//THESE MUST BE MOVED INTO grid.h/////////////
 #define MAX_GRID_HEIGHT 100
 
 #define MAX_GRID_WIDTH 50
 
 #define DEF_GRID_HEIGHT MAX_GRID_HEIGHT
 #define DEF_GRID_WIDTH MAX_GRID_WIDTH
+//////////////////////////////////////////////
+
+
+
+
+
 
 #define WIN_BORDER 5
 
@@ -23,25 +31,25 @@ extern int grid_height;
 
 #define CIRCLE_RAD 4
 
-#define BG_R 255
-#define BG_G 255
-#define BG_B 255
+#define BG_R 127
+#define BG_G 127
+#define BG_B 127
 
 #define GOAL_R 0
 #define GOAL_G 255
 #define GOAL_B 0
 
 #define START_R 0
-#define START_G 0
+#define START_G 255
 #define START_B 255
 
-#define GRID_R 255
+#define GRID_R 63
 #define GRID_G 0
 #define GRID_B 0
 
-#define BLOCK_R 0
-#define BLOCK_G 0
-#define BLOCK_B 0
+#define BLOCK_R 31
+#define BLOCK_G 31
+#define BLOCK_B 31
 
 #define PATH_R 255
 #define PATH_G 0
