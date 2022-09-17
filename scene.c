@@ -165,6 +165,17 @@ void drawgrid()
         }
 	*/
 }
+void delgrid()
+{
+	for (int i = 0; i < grid_height+1; i++) {
+		struct line line = GRID_LINE(0,i,grid_width,i);
+                delline(&line);
+        }
+        for (int i = 0; i < grid_width+1; i++) {
+		struct line line = GRID_LINE(i,0,i,grid_height);
+                delline(&line);
+        }
+}
 
 int redraw_scene()
 {
@@ -207,8 +218,11 @@ int clear_scene()
 int resize_window(int x, int y)
 {
 	
-	gfx_resize_window(x,y);
-	gfx_flush();
+	gfx_resize_window((2 * WIN_BORDER) + (PX_PER_SPACE * x), (2 * WIN_BORDER) + (PX_PER_SPACE * y));
+	delgrid();
+	grid_width = x;
+	grid_height = y;
+	drawgrid();
 }
 
 int start_scene()

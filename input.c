@@ -174,7 +174,8 @@ static enum icli_ret resize_cmd(char **argv, int argc, void *context)
 	}
         icli_printf("resizing window...\n");
 	//this line will be moved into grid.c when it's ready
-	resize_window((2 * WIN_BORDER) + (PX_PER_SPACE * x), (2 * WIN_BORDER) + (PX_PER_SPACE * x));
+	resize_window(x,y);
+	redraw_scene();
 		
 	return ICLI_OK;
 }
