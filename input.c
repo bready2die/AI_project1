@@ -18,7 +18,6 @@ static struct icli_command *start;
 static struct icli_command *block;
 static struct icli_command *unblock;
 static struct icli_command *clear;
-static struct icli_command *clearblock;
 static struct icli_command *weight;
 static struct icli_command *run;
 static struct icli_command *runfile;
@@ -198,8 +197,9 @@ static struct icli_command_params resize_params = {
 
 static enum icli_ret block_cmd(char **argv, int argc, void *context)
 {
-	int x,y;
+	long x,y;
 	char *endptr;
+	errno=0;
 	x = strtol(argv[0],&endptr,10);
 	if(check_number(x,grid_width-1) || *endptr != '\0') {
 		icli_err_printf("Invalid or out of range x operand\n");
@@ -239,8 +239,9 @@ static struct icli_command_params block_params = {
 
 static enum icli_ret unblock_cmd(char **argv, int argc, void *context)
 {
-	int x,y;
+	long x,y;
 	char *endptr;
+	errno = 0;
 	x = strtol(argv[0],&endptr,10);
 	if(check_number(x,grid_width-1) || *endptr != '\0') {
 		icli_err_printf("Invalid or out of range x operand\n");

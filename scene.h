@@ -143,6 +143,7 @@ struct rect {
 		char bytes[sizeof(_RECT_DATA)];
 	};
 };
+
 /*
 struct rect {
 	struct list_head list;
