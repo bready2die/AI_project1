@@ -125,6 +125,25 @@ do {						\
 	___temp_rect;						\
 })
 
+#define _RECT_DATA				\
+	struct {				\
+			int x;			\
+			int y;			\
+			int w;			\
+			int h;			\
+			char r;			\
+			char g;			\
+			char b;			\
+	}__attribute__((packed))
+		
+struct rect {
+	struct list_head list;
+	union {
+		_RECT_DATA;
+		char bytes[sizeof(_RECT_DATA)];
+	};
+};
+/*
 struct rect {
 	struct list_head list;
 	union {
@@ -140,6 +159,17 @@ struct rect {
 		char bytes[19];
 	};
 };
+*/
+
+#define _POINT_DATA				\
+	struct {				\
+		int x;				\
+		int y;				\
+		char r;				\
+		char g;				\
+		char b;				\
+	}__attribute__((packed))
+
 struct point {
 	struct list_head list;
 	union {
@@ -153,6 +183,17 @@ struct point {
 		char bytes[11];
 	};
 };
+
+#define _LINE_DATA			\
+	struct {			\
+		int x1;			\
+		int y1;			\
+		int x2;			\
+		int y2;			\
+		char r;			\
+		char g;			\
+		char b;			\
+	}__attribute__((packed))
 
 struct line {
 	struct list_head list;
@@ -170,6 +211,25 @@ struct line {
 	};
 };
 
+#define _CIRCLE_DATA			\
+	struct {			\
+		int x;			\
+		int y;			\
+		int rad;		\
+		char r;			\
+		char g;			\
+		char b;			\
+	}__attribute__((packed))	
+	
+struct circle {
+	struct list_head list;
+	union {
+		_CIRCLE_DATA;
+		char bytes[sizeof(_CIRCLE_DATA)];
+	};
+};
+
+/*
 struct circle {
 	struct list_head list;
 	union {
@@ -184,7 +244,7 @@ struct circle {
 		char bytes[15];
 	};
 };
-
+*/
 
 //currently unused, may be useful in case the graph model needs 
 //to take a deeper look at the screen context for whatever reason
