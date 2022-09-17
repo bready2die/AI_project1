@@ -78,20 +78,20 @@ static enum icli_ret goal_cmd(char **argv, int argc, void *context)
 }
 
 static struct icli_arg goal_args[] = {
-	{.type=AT_None, .help="x value"},
-	{.type=AT_None, .help="y value"},
+	{.type = AT_None, .help = "x value"},
+	{.type = AT_None, .help = "y value"},
 };
 
 
 
 static struct icli_command_params goal_params = {
-	.parent = NULL,
-	.name = "goal",
+	.parent     = NULL,
+	.name       = "goal",
 	.short_name = "goal",
-	.help = "set goal node",
-	.command = goal_cmd,
-	.argc = 2,
-	.argv = goal_args,
+	.help       = "set goal node",
+	.command    = goal_cmd,
+	.argc       = 2,
+	.argv       = goal_args,
 };
 
 
@@ -133,20 +133,20 @@ static enum icli_ret start_cmd(char **argv, int argc, void *context)
 }
 
 static struct icli_arg start_args[] = {
-	{.type=AT_None, .help="x value"},
-	{.type=AT_None, .help="y value"},
+	{.type = AT_None, .help = "x value"},
+	{.type = AT_None, .help = "y value"},
 };
 
 
 
 static struct icli_command_params start_params = {
-	.parent = NULL,
-	.name = "start",
-	.short_name = "start",
-	.help = "set start node",
-	.command = start_cmd,
-	.argc = 2,
-	.argv = start_args,
+	.parent     =   NULL,
+	.name       =   "start",
+	.short_name =   "start",
+	.help       =   "set start node",
+	.command    =   start_cmd,
+	.argc       =   2,
+	.argv       =   start_args,
 };
 
 
@@ -160,13 +160,13 @@ static enum icli_ret clear_cmd(char **argv, int argc, void *context)
 //static struct icli_arg clear_args[] = NULL;
 
 static struct icli_command_params clear_params = {
-	.parent = NULL,
-	.name = "clear",
-	.short_name = "clear",
-	.help = "clear entire board",
-	.command = clear_cmd,
-	.argc = 0,
-	.argv = NULL,
+	.parent     =   NULL,
+	.name       =   "clear",
+	.short_name =   "clear",
+	.help       =   "clear entire board",
+	.command    =   clear_cmd,
+	.argc       =   0,
+	.argv       =   NULL,
 };
 
 static enum icli_ret resize_cmd(char **argv, int argc, void *context)
@@ -207,13 +207,13 @@ static struct icli_arg resize_args[] = {
 
 
 static struct icli_command_params resize_params = {
-	.parent = NULL,
-	.name = "resize",
-	.short_name = "resize",
-	.help = "resize grid",
-	.command = resize_cmd,
-	.argc = 2,
-	.argv = resize_args,
+	.parent     =   NULL,
+	.name       =   "resize",
+	.short_name =   "resize",
+	.help       =   "resize grid",
+	.command    =   resize_cmd,
+	.argc       =   2,
+	.argv       =   resize_args,
 };
 
 static enum icli_ret block_cmd(char **argv, int argc, void *context)
@@ -256,13 +256,13 @@ static struct icli_arg block_args[] = {
 };
 
 static struct icli_command_params block_params = {
-	.parent = NULL,
-	.name = "block",
-	.short_name = "block",
-	.help = "block tile",
-	.command = block_cmd,
-	.argc = 2,
-	.argv = block_args,
+	.parent     =   NULL,
+	.name       =   "block",
+	.short_name =   "block",
+	.help       =   "block tile",
+	.command    =   block_cmd,
+	.argc       =   2,
+	.argv       =   block_args,
 };
 
 static enum icli_ret unblock_cmd(char **argv, int argc, void *context)
@@ -304,13 +304,13 @@ static struct icli_arg unblock_args[] = {
 };
 
 static struct icli_command_params unblock_params = {
-	.parent = NULL,
-	.name = "unblock",
-	.short_name = "unblock",
-	.help = "unblock tile",
-	.command = unblock_cmd,
-	.argc = 2,
-	.argv = unblock_args,
+	.parent     =   NULL,
+	.name       =   "unblock",
+	.short_name =   "unblock",
+	.help       =   "unblock tile",
+	.command    =   unblock_cmd,
+	.argc       =   2,
+	.argv       =   unblock_args,
 };
 
 struct command_list cmd_list[] = {
