@@ -48,7 +48,7 @@ static enum icli_ret goal_cmd(char **argv, int argc, void *context)
 	char *endptr;
 	
 	errno = 0;
-	x = strtol(argv[0],&endptr,10);
+	x = strtol(argv[0], &endptr, 10);
 	if(check_number(x,grid_width) || *endptr != '\0') {
 		icli_err_printf("Invalid or out of range x operand\n");
 		return ICLI_ERR;
@@ -56,19 +56,19 @@ static enum icli_ret goal_cmd(char **argv, int argc, void *context)
 	
 	endptr = NULL;
 	errno = 0;
-	y = strtol(argv[1],&endptr,10);
-	if(check_number(y,grid_height) || *endptr != '\0') {
+	y = strtol(argv[1], &endptr, 10);
+	if(check_number(y, grid_height) || *endptr != '\0') {
 		icli_err_printf("Invalid or out of range y operand\n");
 		return ICLI_ERR;
 	}
 	
 #ifdef TEST_GRAPHICS
 	//struct circle circle = GOAL_CIRCLE( 3 +((int)x*10), 3 + ((int)y*10), 5);
-	struct circle circle = GOAL_CIRCLE( (int)x,(int)y, CIRCLE_RAD);
+	struct circle circle = GOAL_CIRCLE( (int)x, (int)y, CIRCLE_RAD);
 	if (goal_set)
 		delcircle(&goal_circle);
 	goal_set = 1;
-	memcpy(&goal_circle,&circle,sizeof(struct circle));
+	memcpy(&goal_circle, &circle, sizeof(struct circle));
 	addcircle(&circle);
 	redraw_scene();
 #endif
@@ -103,16 +103,16 @@ static enum icli_ret start_cmd(char **argv, int argc, void *context)
 	char *endptr;
 	
 	errno = 0;
-	x = strtol(argv[0],&endptr,10);
-	if (check_number(x,grid_width) || *endptr != '\0') {
+	x = strtol(argv[0], &endptr, 10);
+	if (check_number(x, grid_width) || *endptr != '\0') {
 		icli_err_printf("Invalid or out of range x operand\n");
 		return ICLI_ERR;
 	}
 	
 	endptr = NULL;
 	errno = 0;
-	y = strtol(argv[1],&endptr,10);
-	if (check_number(y,grid_height) || *endptr != '\0') {
+	y = strtol(argv[1], &endptr, 10);
+	if (check_number(y, grid_height) || *endptr != '\0') {
 		icli_err_printf("Invalid or out of range y operand\n");
 		return ICLI_ERR;
 	}
@@ -122,7 +122,7 @@ static enum icli_ret start_cmd(char **argv, int argc, void *context)
 	if (start_set)
 		delcircle(&start_circle);
 	start_set = 1;
-	memcpy(&start_circle,&circle,sizeof(struct circle));
+	memcpy(&start_circle, &circle, sizeof(struct circle));
 	addcircle(&circle);
 	redraw_scene();
 #endif
@@ -175,17 +175,17 @@ static enum icli_ret resize_cmd(char **argv, int argc, void *context)
 	char *endptr;
 	
 	errno = 0;
-	x = strtol(argv[0],&endptr,10);
-	if (check_number(x,MAX_GRID_WIDTH) || *endptr != '\0') {
-		icli_err_printf("x operand invalid value or larger than max of %d\n",MAX_GRID_WIDTH);
+	x = strtol(argv[0], &endptr, 10);
+	if (check_number(x, MAX_GRID_WIDTH) || *endptr != '\0') {
+		icli_err_printf("x operand invalid value or larger than max of %d\n", MAX_GRID_WIDTH);
 		return ICLI_ERR;
 	}
 	
 	endptr = NULL;
 	errno = 0;
-	y = strtol(argv[1],&endptr,10);
+	y = strtol(argv[1], &endptr, 10);
 	if (check_number(y,MAX_GRID_HEIGHT) || *endptr != '\0') {
-		icli_err_printf("y operand invalid value or larger than max of %d\n",MAX_GRID_HEIGHT);
+		icli_err_printf("y operand invalid value or larger than max of %d\n", MAX_GRID_HEIGHT);
 		return ICLI_ERR;
 	}
 	
@@ -222,16 +222,16 @@ static enum icli_ret block_cmd(char **argv, int argc, void *context)
 	char *endptr;
 	
 	errno=0;
-	x = strtol(argv[0],&endptr,10);
-	if(check_number(x,grid_width-1) || *endptr != '\0') {
+	x = strtol(argv[0], &endptr, 10);
+	if(check_number(x, grid_width - 1) || *endptr != '\0') {
 		icli_err_printf("Invalid or out of range x operand\n");
 		return ICLI_ERR;
 	}
 	
 	endptr = NULL;
 	errno = 0;
-	y = strtol(argv[1],&endptr,10);
-	if(check_number(y,grid_height-1) || *endptr != '\0') {
+	y = strtol(argv[1], &endptr,10);
+	if(check_number(y, grid_height - 1) || *endptr != '\0') {
 		icli_err_printf("Invalid or out of range y operand\n");
 		return ICLI_ERR;
 	}
@@ -271,16 +271,16 @@ static enum icli_ret unblock_cmd(char **argv, int argc, void *context)
 	char *endptr;
 	
 	errno = 0;
-	x = strtol(argv[0],&endptr,10);
-	if(check_number(x,grid_width-1) || *endptr != '\0') {
+	x = strtol(argv[0], &endptr, 10);
+	if(check_number(x, grid_width - 1) || *endptr != '\0') {
 		icli_err_printf("Invalid or out of range x operand\n");
 		return ICLI_ERR;
 	}
 	
 	endptr = NULL;
 	errno = 0;
-	y = strtol(argv[1],&endptr,10);
-	if(check_number(y,grid_height-1) || *endptr != '\0') {
+	y = strtol(argv[1], &endptr, 10);
+	if(check_number(y, grid_height - 1) || *endptr != '\0') {
 		icli_err_printf("Invalid or out of range y operand\n");
 		return ICLI_ERR;
 	}
@@ -314,12 +314,12 @@ static struct icli_command_params unblock_params = {
 };
 
 struct command_list cmd_list[] = {
-	{"goal", &goal,&goal_params ,(struct icli_arg **)&goal_args, goal_cmd},
-	{"start", &start, &start_params, (struct icli_arg **)&start_args, start_cmd},
-	{"clear", &clear,&clear_params,(struct icli_arg **)NULL,clear_cmd},
-	{"resize",&resize,&resize_params,(struct icli_arg **)&resize_args,resize_cmd},
-	{"block",&block,&block_params,(struct icli_arg **)&block_args,block_cmd},
-	{"unblock",&unblock,&unblock_params,(struct icli_arg **)&unblock_args,unblock_cmd},
+	{"goal",    &goal,    &goal_params ,   (struct icli_arg **) &goal_args,    goal_cmd},
+	{"start",   &start,   &start_params,   (struct icli_arg **) &start_args,   start_cmd},
+	{"clear",   &clear,   &clear_params,   (struct icli_arg **) NULL,          clear_cmd},
+	{"resize",  &resize,  &resize_params,  (struct icli_arg **) &resize_args,  resize_cmd},
+	{"block",   &block,   &block_params,   (struct icli_arg **) &block_args,   block_cmd},
+	{"unblock", &unblock, &unblock_params, (struct icli_arg **) &unblock_args, unblock_cmd},
 };
 
 
@@ -329,7 +329,7 @@ int pathfinder_register_commands()
         int ret;
 	
         for (int i = 0; i < ARRAY_SIZE(cmd_list); i++) {
-                ret = icli_register_command(cmd_list[i].cmd_params,cmd_list[i].cmd);
+                ret = icli_register_command(cmd_list[i].cmd_params, cmd_list[i].cmd);
                 if (ret) {
                         fprintf(stderr, "Unable to register command: %s\n", cmd_list[i].name);
                         ret = EXIT_FAILURE;
