@@ -1,17 +1,17 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "linux_list.h"
 
 //NOTE: NONE of this has been bug tested.
 
+static int width, height;
+static struct coords start, goal;
+static char goal_placed, start_placed, algo_ran;
+static char init = 0;
+static char* blocks; //grid noting blocked tiles.
+static struct list_head vertex_list;
 
-struct grid
-{
-	int width, height;
-	struct coords start, goal;
-	char* blocks; //grid noting blocked tiles.
-	struct list_head vertex_list;
-}
 
 struct coords
 {
@@ -29,8 +29,37 @@ struct vertex // this setup may change, maybe
 	//store lines for scene here? (this to parent, most likely)
 }
 
-int read_file(struct grid* grid, char* filename)
+int new_grid(int _width, int _height)
 {
+	if (!init)
+	{
+		close_grid();
+	}
+
+	if (_width < 1 || _height < 1)
+	{
+		return 1;
+	}
+	width = _width;
+	height = _height;
+	goal_placed = 0;
+	start_placed = 0;
+	algo_ran = 0;
+	blocks = malloc(sizeof(char)*width*height);
+	memset(blocks, 0, width*height);
+	LIST_HEAD(vertex_list);
+
+	init = 1;
+	return 0;
+}
+
+int load_file(char* filename)
+{
+	if (!init)
+        {
+                close_grid();
+        }
+
 	//INIT new struct grid
 	FILE* file = fopen(filename, "r");
 	if (file == NULL)
@@ -39,32 +68,37 @@ int read_file(struct grid* grid, char* filename)
 		return 1;
 	}
 	//int count; Maybe I'll add error handling later
-	fscanf(file, "%d %d ", &(grid->start.x), &(grid->start.y));
-	fscanf(file, "%d %d ", &(grid->goal.x), &(grid->goal.y));
-	fscanf(file, "%d %d ", &(grid->width), &(grid->height));
+	fscanf(file, "%d %d ", &(start.x), &(start.y));
+	fscanf(file, "%d %d ", &(goal.x), &(goal.y));
+	fscanf(file, "%d %d ", &(width), &(height));
 	
-	grid->blocks = malloc(sizeof(char)*grid->width*grid->height);
+	goal_placed = 1;
+	start_placed = 1;
+	algo_ran = 0;
+
+	blocks = malloc(sizeof(char)*width*height);
 	
 	int buf1, buf2;
 	char buf3;
 	while (fscanf("%d %d %d ", &buf1, &buf2, &buf3) == 3)
 	{
-		if (buf1 > 0 && buf1 <= grid->width || buf2 > 0 && buf2 <= grid->height)
+		if (buf1 > 0 && buf1 <= width || buf2 > 0 && buf2 <= height)
 		{
 			buf1--;
 			buf2--;
-			grid->blocks[buf1*(grid->height) + buf2] = buf3;
+			blocks[buf1*height + buf2] = buf3;
 		}
 	}
 
 	//init start vertex, I guess?
-	grid->vertex_list = LIST_START_INIT(grid->vertex_list);
+	LIST_HEAD(vertex_list);
 
 	if (fclose(file))
+	init = 1;
 	return 0;
 }
 
-static int succ(struct grid* grid, struct coords pos, struct coords* buffer) //returns successor count
+static int succ(struct coords pos, struct coords* buffer) //returns successor count
 {
 	int count = 0;
 
@@ -78,8 +112,8 @@ static int succ(struct grid* grid, struct coords pos, struct coords* buffer) //r
 		int cell_x = pos.x + i/2 - 1;
 		int cell_y = pos.y + i%2 - 1;
 		//checks if tile is empty
-		if (cell_x >= 0 && cell_y >= 0 && cell_x < grid->width && cell_y < grid->height 
-			&& grid->blocks[cell_x*(grid->height) + cell_y] == 0)
+		if (cell_x >= 0 && cell_y >= 0 && cell_x < width && cell_y < height 
+			&& blocks[cell_x*(height) + cell_y] == 0)
 		{
 			//unmark flag and add diagonal neughbor
 			flags &= ~(1 << (3-i));
@@ -119,13 +153,13 @@ static int succ(struct grid* grid, struct coords pos, struct coords* buffer) //r
 	return count;
 }
 
-void clear_vertex_list (struct grid* grid)
+void clear_vertex_list ()
 {
 	struct list_head* i;
 	struct list_head* buf;
 	struct vertex* v;
 
-	list_for_each_safe(i, buf, &(grid->vertex_list))
+	list_for_each_safe(i, buf, &vertex_list)
 	{
 		v = list_entry(i, struct vertex, list);
 		list_del(i);
@@ -135,9 +169,9 @@ void clear_vertex_list (struct grid* grid)
 	//TODO
 }
 
-void close_grid(struct grid* grid)//note:does not free the pointer itself
+void close_grid()//note:does not free the pointer itself
 {
-	free(grid->blocks);
+	free(blocks);
 	clear_vertex_list(grid);
 }
 
