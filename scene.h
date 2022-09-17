@@ -144,23 +144,6 @@ struct rect {
 	};
 };
 
-/*
-struct rect {
-	struct list_head list;
-	union {
-		struct {
-			int x;
-			int y;
-			int w;
-			int h;
-			char r;
-			char g;
-			char b;
-		}__attribute__((packed));
-		char bytes[19];
-	};
-};
-*/
 
 #define _POINT_DATA				\
 	struct {				\
@@ -171,17 +154,12 @@ struct rect {
 		char b;				\
 	}__attribute__((packed))
 
+
 struct point {
 	struct list_head list;
 	union {
-		struct {
-			int x;
-			int y;
-			char r;
-			char g;
-			char b;
-		}__attribute__((packed));
-		char bytes[11];
+	        _POINT_DATA;
+		char bytes[sizeof(_POINT_DATA)];
 	};
 };
 
@@ -199,18 +177,11 @@ struct point {
 struct line {
 	struct list_head list;
 	union {
-		struct {
-			int x1;
-			int y1;
-			int x2;
-			int y2;
-			char r;
-			char g;
-			char b;
-		}__attribute__((packed));
-		char bytes[19];
+	        _LINE_DATA;
+		char bytes[sizeof(_LINE_DATA)];
 	};
 };
+
 
 #define _CIRCLE_DATA			\
 	struct {			\
@@ -230,22 +201,6 @@ struct circle {
 	};
 };
 
-/*
-struct circle {
-	struct list_head list;
-	union {
-		struct {
-			int x;
-			int y;
-			int rad;
-			char r;
-			char g;
-			char b;
-		}__attribute__((packed));
-		char bytes[15];
-	};
-};
-*/
 
 //currently unused, may be useful in case the graph model needs 
 //to take a deeper look at the screen context for whatever reason

@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-Wall -g -fsanitize=address
+CFLAGS=-Wall -g 
 
 example: icli.o main.o gfx.o input.o window.o scene.o
 	$(CC) $(CFLAGS) ./main.o ./window.o ./icli.o ./gfx.o ./input.o ./scene.o -o path_finder -ledit -lX11
