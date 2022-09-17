@@ -53,6 +53,32 @@ int new_grid(int _width, int _height)
 	return 0;
 }
 
+int put_start(int x, int y)
+{
+	if (x < 0 || x >= width || y < 0 || y >= height)
+	{
+		return 1;
+	}
+	start.x = x;
+	start.y = y;
+	start_placed = 1;
+
+	return 0;
+}
+
+int put_goal(int x, int y)
+{
+        if (x < 0 || x >= width || y < 0 || y >= height)
+        {
+                return 1;
+        }
+        goal.x = x;
+        goal.y = y;
+	goal_placed = 1;
+
+        return 0;
+}
+
 int load_file(char* filename)
 {
 	if (!init)
