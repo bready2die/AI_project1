@@ -192,11 +192,17 @@ int redraw_scene()
 		
 	gfx_clear();
 	gfx_flush();
-	struct list_head *ipoint,*iline,*icircle;
+	struct list_head *ipoint,*iline,*icircle,*irect;
 	struct line *lcur;
 	struct point *pcur;
 	struct circle *ccur;
+	struct rect *rcur;
 	pthread_mutex_lock(&scene_lock);
+	list_for_each(irect,&_scene_rects) {
+		rcur = list_entry(irect, struct rect,list);
+		gfx_color(rcur->r,rcur->g,rcur->b);
+		gfx_rect(rcur->x,rcur->y,rcur->w,rcur->h);
+	}
 	list_for_each(ipoint,&_scene_points) {
 		pcur = list_entry(ipoint, struct point,list);
 		gfx_color(pcur->r,pcur->g,pcur->b);

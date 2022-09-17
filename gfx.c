@@ -119,6 +119,10 @@ void gfx_circle(int x, int y, int rad)
 	XDrawArc(gfx_display,gfx_window,gfx_gc,x,y,2*rad,2*rad,0,360*64);
 }
 
+void gfx_rect(int x, int y, int w, int h)
+{
+	XFillRectangle(gfx_display,gfx_window,gfx_gc,x,y,w,h);
+}
 /* Change the current drawing color. */
 
 void gfx_color( int r, int g, int b )
