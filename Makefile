@@ -1,17 +1,22 @@
+CC=gcc
+CFLAGS=-Wall -g -fsanitize=address
+
 example: icli.o main.o gfx.o input.o window.o scene.o
-	gcc ./main.o ./window.o ./icli.o ./gfx.o ./input.o ./scene.o -o path_finder -ledit -lX11
+	$(CC) $(CFLAGS) ./main.o ./window.o ./icli.o ./gfx.o ./input.o ./scene.o -o path_finder -ledit -lX11
 
 scene.o:
-	gcc -Wall -g -c ./scene.c
+	$(CC) $(CFLAGS) -c ./scene.c
 window.o:
-	gcc -Wall -g -c ./window.c
+	$(CC) $(CFLAGS) -c ./window.c
 input.o:
-	gcc -Wall -g -c ./input.c
+	$(CC) $(CFLAGS) -c ./input.c
 gfx.o:
-	gcc -Wall -g -c ./gfx.c
-icli.o: 
-	gcc -Wall -g -c ./icli.c
+	$(CC) $(CFLAGS) -c ./gfx.c
+icli.o:
+	$(CC) $(CFLAGS) -c ./icli.c
 main.o:
-	gcc -Wall -g -c ./main.c
+	$(CC) $(CFLAGS) -c ./main.c
 clean:
 	rm path_finder *.o icli_history cli.log path.dot
+clean_data:
+	rm icli_history cli.log path.dot

@@ -279,12 +279,12 @@ static struct icli_command_params unblock_params = {
 };
 
 struct command_list cmd_list[] = {
-	{"goal", &goal,&goal_params ,&goal_args, goal_cmd},
-	{"start", &start, &start_params, &start_args, start_cmd},
-	{"clear", &clear,&clear_params,NULL,clear_cmd},
-	{"resize",&resize,&resize_params,&resize_args,resize_cmd},
-	{"block",&block,&block_params,&block_args,block_cmd},
-	{"unblock",&unblock,&unblock_params,&unblock_args,unblock_cmd},
+	{"goal", &goal,&goal_params ,(struct icli_arg **)&goal_args, goal_cmd},
+	{"start", &start, &start_params, (struct icli_arg **)&start_args, start_cmd},
+	{"clear", &clear,&clear_params,(struct icli_arg **)NULL,clear_cmd},
+	{"resize",&resize,&resize_params,(struct icli_arg **)&resize_args,resize_cmd},
+	{"block",&block,&block_params,(struct icli_arg **)&block_args,block_cmd},
+	{"unblock",&unblock,&unblock_params,(struct icli_arg **)&unblock_args,unblock_cmd},
 };
 
 
