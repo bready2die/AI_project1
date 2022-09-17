@@ -111,7 +111,7 @@ do {						\
 })
 
 #define _MAKE_RECT(__name,__x,__y,__w,__h)	\
-	struct rect (__rect) = {		\
+	struct rect (__name) = {		\
 		.x = (__x),			\
 		.y = (__y),			\
 		.w = (__w),			\
@@ -195,6 +195,10 @@ struct scene_context {
 	struct list_head scene_circles;
 };
 
+
+int addrect(struct rect *rect);
+
+int delrect(struct rect *rect);
 
 int addline(struct line *line);
 

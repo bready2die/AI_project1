@@ -186,7 +186,6 @@ static struct icli_arg resize_args[] = {
 };
 
 
-
 static struct icli_command_params resize_params = {
 	.parent = NULL,
 	.name = "resize",
@@ -197,12 +196,95 @@ static struct icli_command_params resize_params = {
 	.argv = resize_args,
 };
 
+static enum icli_ret block_cmd(char **argv, int argc, void *context)
+{
+	int x,y;
+	char *endptr;
+	x = strtol(argv[0],&endptr,10);
+	if(check_number(x,grid_width-1) || *endptr != '\0') {
+		icli_err_printf("Invalid or out of range x operand\n");
+		return ICLI_ERR;
+	}
+	endptr = NULL;
+	errno = 0;
+	y = strtol(argv[1],&endptr,10);
+	if(check_number(y,grid_height-1) || *endptr != '\0') {
+		icli_err_printf("Invalid or out of range y operand\n");
+		return ICLI_ERR;
+	}
+	icli_printf("adding block...\n");
+	//this is only for testing purposes, what goes in graph.c
+	//MUST check for the presence of a block
+	struct rect rect = BLOCK_RECT(x,y);
+	addrect(&rect);
+	redraw_scene();
+	return ICLI_OK;
+	
+}
+
+static struct icli_arg block_args[] = {
+	{.type = AT_None, .help = "x value"},
+	{.type = AT_None, .help = "y value"},
+};
+
+static struct icli_command_params block_params = {
+	.parent = NULL,
+	.name = "block",
+	.short_name = "block",
+	.help = "block tile",
+	.command = block_cmd,
+	.argc = 2,
+	.argv = block_args,
+};
+
+static enum icli_ret unblock_cmd(char **argv, int argc, void *context)
+{
+	int x,y;
+	char *endptr;
+	x = strtol(argv[0],&endptr,10);
+	if(check_number(x,grid_width-1) || *endptr != '\0') {
+		icli_err_printf("Invalid or out of range x operand\n");
+		return ICLI_ERR;
+	}
+	endptr = NULL;
+	errno = 0;
+	y = strtol(argv[1],&endptr,10);
+	if(check_number(y,grid_height-1) || *endptr != '\0') {
+		icli_err_printf("Invalid or out of range y operand\n");
+		return ICLI_ERR;
+	}
+	icli_printf("removing block...\n");
+	//this is only for testing purposes, what goes in graph.c
+	//MUST check for the presence of a block
+	struct rect rect = BLOCK_RECT(x,y);
+	delrect(&rect);
+	redraw_scene();
+	return ICLI_OK;
+	
+}
+
+static struct icli_arg unblock_args[] = {
+	{.type = AT_None, .help = "x value"},
+	{.type = AT_None, .help = "y value"},
+};
+
+static struct icli_command_params unblock_params = {
+	.parent = NULL,
+	.name = "unblock",
+	.short_name = "unblock",
+	.help = "unblock tile",
+	.command = unblock_cmd,
+	.argc = 2,
+	.argv = unblock_args,
+};
 
 struct command_list cmd_list[] = {
 	{"goal", &goal,&goal_params ,&goal_args, goal_cmd},
 	{"start", &start, &start_params, &start_args, start_cmd},
 	{"clear", &clear,&clear_params,NULL,clear_cmd},
 	{"resize",&resize,&resize_params,&resize_args,resize_cmd},
+	{"block",&block,&block_params,&block_args,block_cmd},
+	{"unblock",&unblock,&unblock_params,&unblock_args,unblock_cmd},
 };
 
 
