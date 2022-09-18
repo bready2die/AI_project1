@@ -12,23 +12,6 @@ static char init = 0;
 static char* blocks; //grid noting blocked tiles.
 static struct list_head closed_list;
 
-
-struct coords
-{
-	int x, y;
-};
-
-struct vertex // this setup may change, maybe
-{
-	struct coords position;
-	double g; //distance from start, following path
-	double h; //heuristic (estimated distance from vertex to goal)
-	struct vertex* parent;
-	struct list_head list;
-
-	//store lines for scene here? (this to parent, most likely)
-}
-
 int new_grid(int _width, int _height)
 {
 	if (!init)
