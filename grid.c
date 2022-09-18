@@ -129,7 +129,7 @@ static int succ(struct coords pos, struct coords* buffer) //returns successor co
 		if (cell_x >= 0 && cell_y >= 0 && cell_x < width && cell_y < height 
 			&& blocks[cell_x*(height) + cell_y] == 0)
 		{
-			//unmark flag and add diagonal neughbor
+			//unmark flag and add diagonal neighbor
 			flags &= ~(1 << (3-i));
 			buffer[count] = (struct coords)
 			{
@@ -191,7 +191,7 @@ int search_vertices(struct coords coords, struct vertex** output)
 		list_for_each(i, &closed_list)
 		{
 			struct vertex* v = list_entry(i, struct vertex, list);
-			if (vertex->position == coords)
+			if (COORDS_CMP(vertex->position, coords))
 			{
 				test = 0;
 				*output = v;

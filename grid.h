@@ -6,6 +6,9 @@ struct coords
         int x, y;
 };
 
+#define COORDS_CMP(a, b)\
+	((a).x == (b).x && (a).y == (b).y)
+
 struct vertex // this setup may change, maybe
 {
         struct coords position;

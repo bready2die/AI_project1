@@ -99,7 +99,7 @@ int heap_pop(struct heap* h, struct vertex** output){
 
 int heap_search(struct heap* h, struct coords position, struct vertex** output){
 	for (int i = 0; i < h->size; i++){
-		if (h->array[i]->element->position == position){
+		if (COORDS_CMP(h->array[i]->element->position, position)){
 			if (output)
 			{
 				*output = h->array[i]->element;
@@ -112,7 +112,7 @@ int heap_search(struct heap* h, struct coords position, struct vertex** output){
 
 int heap_remove(struct heap* h, struct coords position, struct vertex** output){
         for (int i = 0; i < h->size; i++){
-		if (h->array[i]->element->position == position){
+		if (COORDS_CMP(h->array[i]->element->position, position)){
 			swap(&h->array[i], &h->array[h->size - 1]);
 			if (h->array[i]->value < h->array[h->size-1]->value){
 				upheap(h, i);
