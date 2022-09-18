@@ -10,7 +10,7 @@ static struct coords start, goal;
 static char goal_placed, start_placed, algo_ran;
 static char init = 0;
 static char* blocks; //grid noting blocked tiles.
-static struct list_head vertex_list;
+static struct list_head closed_list;
 
 
 struct coords
@@ -47,7 +47,7 @@ int new_grid(int _width, int _height)
 	algo_ran = 0;
 	blocks = malloc(sizeof(char)*width*height);
 	memset(blocks, 0, width*height);
-	LIST_HEAD(vertex_list);
+	LIST_HEAD(closed_list);
 
 	init = 1;
 	return 0;
@@ -117,7 +117,7 @@ int load_file(char* filename)
 	}
 
 	//init start vertex, I guess?
-	LIST_HEAD(vertex_list);
+	LIST_HEAD(closed_list);
 
 	if (fclose(file))
 	init = 1;
@@ -179,13 +179,13 @@ static int succ(struct coords pos, struct coords* buffer) //returns successor co
 	return count;
 }
 
-void clear_vertex_list ()
+void clear_vertices ()
 {
 	struct list_head* i;
 	struct list_head* buf;
 	struct vertex* v;
 
-	list_for_each_safe(i, buf, &vertex_list)
+	list_for_each_safe(i, buf, &closed_list)
 	{
 		v = list_entry(i, struct vertex, list);
 		list_del(i);
@@ -198,7 +198,7 @@ void clear_vertex_list ()
 void close_grid()//note:does not free the pointer itself
 {
 	free(blocks);
-	clear_vertex_list(grid);
+	clear_vertices();
 }
 
 
