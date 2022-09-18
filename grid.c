@@ -183,6 +183,55 @@ void clear_vertices ()
 	//TODO
 }
 
+int search_vertices(struct coords coords, struct vertex** output)
+{
+	int test = heap_search(&fringe, coords, &output);
+	if (test)
+	{
+		list_for_each(i, &closed_list)
+		{
+			struct vertex* v = list_entry(i, struct vertex, list);
+			if (vertex->position == coords)
+			{
+				test = 0;
+				*output = v;
+				break;
+			}
+		}
+	}
+	if (!test)
+	{
+		return 1;
+	}
+	return 0;
+}
+
+int get_hval(int x, int y, double* ret)
+{
+	struct vertex* target;
+	int test = search_vertices((struct coords){.x=x,.y=y}, &target);
+	if (test == 1)
+	{
+		return 1;
+	}
+
+	*ret = target->h;
+	return 0;
+}
+
+int get_fval(int x, int y, double* ret)
+{
+        struct vertex* target;
+        int test = search_vertices((struct coords){.x=x,.y=y}, &target);
+	if (test == 1)
+	{
+		return 1;
+	}
+
+        *ret = target->h + target->g;
+        return 0;
+}
+
 void close_grid()//note:does not free the pointer itself
 {
 	free(blocks);
