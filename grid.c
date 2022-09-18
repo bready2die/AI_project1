@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "linux_list.h"
+#include "grid.h"
+#include "heap.h"
 
 //NOTE: NONE of this has been bug tested.
 
@@ -11,6 +13,7 @@ static char goal_placed, start_placed, algo_ran;
 static char init = 0;
 static char* blocks; //grid noting blocked tiles.
 static struct list_head closed_list;
+static struct heap fringe;
 
 int new_grid(int _width, int _height)
 {
@@ -31,6 +34,7 @@ int new_grid(int _width, int _height)
 	blocks = malloc(sizeof(char)*width*height);
 	memset(blocks, 0, width*height);
 	LIST_HEAD(closed_list);
+	heap_init(&fringe);
 
 	init = 1;
 	return 0;
@@ -101,6 +105,7 @@ int load_file(char* filename)
 
 	//init start vertex, I guess?
 	LIST_HEAD(closed_list);
+	heap_init(&fringe);
 
 	if (fclose(file))
 	init = 1;
@@ -182,6 +187,7 @@ void close_grid()//note:does not free the pointer itself
 {
 	free(blocks);
 	clear_vertices();
+	heap_destroy(&fringe);
 }
 
 

@@ -136,8 +136,9 @@ int heap_is_empty(struct heap* h){
 	return h->size == 0;
 }
 
-int heap_destroy(struct heap* h){
+int heap_destroy(struct heap* h){//NOTE FREES ALL VERTICES
 	for (int i = 0; i < h->size; i++){
+		free(h->array[0]->element);
 		free(h->array[0]);
 	}
 	free(h->array);

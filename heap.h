@@ -26,7 +26,7 @@ int heap_remove(struct heap* h, struct coords position, struct vertex** output);
 
 int heap_is_empty(struct heap* h);
 
-int heap_destroy(struct heap* h);
+int heap_destroy(struct heap* h);//NOTE: FREES ALL VERTICES
 
 int heap_debug_print(struct heap* h);
 
