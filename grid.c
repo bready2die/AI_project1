@@ -20,9 +20,9 @@ struct coords
 
 struct vertex // this setup may change, maybe
 {
-	struct coords;
-	float g; //distance from start, following path
-	float h; //heuristic (estimated distance from vertex to goal)
+	struct coords position;
+	double g; //distance from start, following path
+	double h; //heuristic (estimated distance from vertex to goal)
 	struct vertex* parent;
 	struct list_head list;
 

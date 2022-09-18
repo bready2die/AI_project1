@@ -1,3 +1,6 @@
+/*
+	NOTE: Intended for use in the algorithms
+*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -43,16 +46,16 @@ static void downheap(struct heap* h, int index){
 
 int heap_init(struct heap* new_heap){
 	struct heap buffer = {
-		.array = malloc(sizeof(void*)),
+		.array = malloc(sizeof(struct vertex*)),
 		.size = 0,
 		.max_size = 1
 	};
 	*new_heap = buffer;
-	memset(new_heap->array, 0, sizeof(void*)*new_heap->max_size);
+	memset(new_heap->array, 0, sizeof(struct vertex*)*new_heap->max_size);
 	return 0;
 }
 
-int heap_insert(struct heap* h, void* element, float value){
+int heap_insert(struct heap* h, struct vertex* element, double value){
 	//extend heap if necessary
 	if (h->size >= h->max_size){
 		h->max_size *= 2;
@@ -77,29 +80,39 @@ int heap_insert(struct heap* h, void* element, float value){
 	return 0;
 }
 
-void* heap_pop(struct heap* h){
-	void* out = h->array[0]->element;
+int heap_pop(struct heap* h, struct vertex** output){
+	if (h->size <= 0)
+	{
+		return 1;
+	}
+
+	struct vertex* out = h->array[0]->element;
 	free(h->array[0]);
 	h->array[0] = h->array[h->size-1];
 	h->size -= 1;
 
 	downheap(h, 0);
 
-	return out;
-}
-
-int heap_search(struct heap* h, void* element){
-	for (int i = 0; i < h->size; i++){
-		if (h->array[i]->element = element){
-			return 1;
-		}
-	}
+	*output = out;
 	return 0;
 }
 
-int heap_remove(struct heap* h, void* element){
+int heap_search(struct heap* h, struct coords position, struct vertex** output){
+	for (int i = 0; i < h->size; i++){
+		if (h->array[i]->element->position == position){
+			if (output)
+			{
+				*output = h->array[i]->element;
+			}
+			return 0;
+		}
+	}
+	return 1;
+}
+
+int heap_remove(struct heap* h, struct coords position, struct vertex** output){
         for (int i = 0; i < h->size; i++){
-		if (h->array[i]->element == element){
+		if (h->array[i]->element->position == position){
 			swap(&h->array[i], &h->array[h->size - 1]);
 			if (h->array[i]->value < h->array[h->size-1]->value){
 				upheap(h, i);
@@ -107,12 +120,16 @@ int heap_remove(struct heap* h, void* element){
 				downheap(h, i);
 			}
 
+			if (output)
+			{
+				*output = h->array[h->size-1]->element;
+			}
 			free(h->array[h->size-1]);
 			h->size -= 1;
-			return 1;
+			return 0;
 		}
 	}
-	return 0;
+	return 1;
 }
 
 int heap_is_empty(struct heap* h){
