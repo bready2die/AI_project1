@@ -55,6 +55,9 @@ extern int grid_height;
 #define PATH_G 0
 #define PATH_B 255
 
+#define DIAG_R 127
+#define DIAG_G 90
+#define DIAG_B 90
 
 #define _COLOR_SHAPE(__shape, __r,__g,__b)	\
 do {						\
@@ -115,6 +118,13 @@ do {						\
 ({								\
 	_MAKE_LINE(___temp_line,(_x1),(_y1),(_x2),(_y2));	\
 	_COLOR_SHAPE(___temp_line,GRID_R,GRID_G,GRID_B);	\
+	___temp_line;						\
+})
+
+#define DIAG_LINE(_x1, _y1, _x2, _y2)				\
+({								\
+	_MAKE_LINE(___temp_line,(_x1),(_y1),(_x2),(_y2));	\
+	_COLOR_SHAPE(___temp_line,DIAG_R,DIAG_G,DIAG_B);	\
 	___temp_line;						\
 })
 

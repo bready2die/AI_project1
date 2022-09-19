@@ -3,6 +3,11 @@
 #include "gfx.h"
 #include "window.h"
 #include "scene.h"
+
+#define MAX(a,b) ((a) > (b) ? (a) : (b))
+
+#define MIN(a,b) ((a) > (b) ? (b) : (a))
+
 //both grid_width and grid_height should be moved into graph.c when it is ready for testing
 
 int grid_width=DEF_GRID_WIDTH;
@@ -197,6 +202,23 @@ void drawgrid()
 		struct line line = GRID_LINE(i,0,i,grid_height);
                 addline(&line);
         }
+	for (int i = 0; i < grid_width; i++) {
+		struct line line = DIAG_LINE(MAX(0, i - grid_height),MIN(i, grid_height),i,0);
+		//struct line line2 = DIAG_LINE(MIN(i, grid_height),MAX(0, i - grid_height),0,i);
+                addline(&line);
+		//addline(&line2);
+        }
+	
+	for (int i = 0; i < grid_height + 1; i++) {
+	        struct line line = DIAG_LINE(MAX(0,(i - (grid_height - grid_width))),MIN(i + grid_width, grid_height),grid_width, i);
+                addline(&line);
+        }
+	/*
+	for (int i = 0; i < grid_height + 1; i++) {
+		struct line line = DIAG_LINE(0,(grid_height - grid_width) + (i + 1), grid_width + 1,i);
+		addline(&line);
+	}
+	*/
 }
 
 void delgrid()
@@ -209,6 +231,27 @@ void delgrid()
 		struct line line = GRID_LINE(i,0,i,grid_height);
                 delline(&line);
         }
+	for (int i = 0; i < grid_width; i++) {
+		struct line line = DIAG_LINE(MAX(0, i - grid_height),MIN(i, grid_height),i,0);
+		//struct line line2 = DIAG_LINE(MIN(i, grid_height),MAX(0, i - grid_height),0,i);
+                delline(&line);
+		//delline(&line2);
+        }
+	for (int i = 0; i < grid_height + 1; i++) {
+	        struct line line = DIAG_LINE(MAX(0,(i - (grid_height - grid_width))),MIN(i + grid_width, grid_height),grid_width, i);
+                delline(&line);
+        }
+	/*
+	for (int i = grid_width; i < grid_height + 1; i++) {
+		struct line line = DIAG_LINE(0,i,i,0);
+                addline(&line);
+        }
+	
+	for (int i = 0; i < grid_height + 1; i++) {
+		struct line line = DIAG_LINE(0, (grid_height - grid_width) + (i + 1), grid_width + 1,i);
+		delline(&line);
+	}
+	*/
 }
 
 int redraw_scene()
