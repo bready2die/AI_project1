@@ -7,9 +7,11 @@
 #include <limits.h>
 #include "input.h"
 #include "scene.h"
+//#define TEST_GRID 1
+#ifdef TEST_GRID
+#include "grid.h"
+#endif
 
-//extern int grid_width;
-//extern int grid_height;
 
 #define TEST_GRAPHICS 1
 
@@ -20,7 +22,7 @@ static struct icli_command *unblock;
 static struct icli_command *clear;
 static struct icli_command *get_values;
 static struct icli_command *run;
-static struct icli_command *runfile;
+static struct icli_command *load;
 static struct icli_command *resize;
 //static struct icli_command *exit_sim;
 
@@ -313,13 +315,66 @@ static struct icli_command_params unblock_params = {
 	.argv       =   unblock_args,
 };
 
+static enum icli_ret load_cmd(char **argv, int argc, void *context)
+{
+#ifdef TEST_GRID
+	if(load_file(argv[1])) {
+		icli_err_printf("error opening file\n");
+		return ICLI_ERR;
+	}
+	#else
+	icli_printf("command not yet implemented\n");
+#endif
+	return ICLI_OK;
+}
+static struct icli_arg load_args[] = {
+	{.type = AT_None, .help = "name of file to load" },
+};
+
+static struct icli_command_params load_params = {
+	.parent = NULL,
+	.name = "load",
+	.short_name = "load",
+	.help = "load a test file onto the board",
+	.command = load_cmd,
+	.argc = 2,
+	.argv = load_args,
+};
+
+static enum icli_ret run_cmd(char **argv, int argc, void *context)
+{
+	icli_printf("command not yet implemented\n");
+	return ICLI_OK;
+}
+
+struct icli_arg_val run_arg_vals[] = {
+	{.val = "astar"},
+	{.val = "theta"},
+};
+
+static struct icli_arg run_args[] = {
+	{.type = AT_Val, .vals = run_arg_vals, .help = "name of algorithm to run" },
+};
+
+static struct icli_command_params run_params = {
+	.parent = NULL,
+	.name = "run",
+	.short_name = "run",
+	.help = "run algorithm on current graph",
+	.command = run_cmd,
+	.argc = 1,
+	.argv = run_args,
+};
+
 struct command_list cmd_list[] = {
-	{"goal",    &goal,    &goal_params ,   (struct icli_arg **) &goal_args,    goal_cmd},
+	{"goal",    &goal,    &goal_params,    (struct icli_arg **) &goal_args,    goal_cmd},
 	{"start",   &start,   &start_params,   (struct icli_arg **) &start_args,   start_cmd},
 	{"clear",   &clear,   &clear_params,   (struct icli_arg **) NULL,          clear_cmd},
 	{"resize",  &resize,  &resize_params,  (struct icli_arg **) &resize_args,  resize_cmd},
 	{"block",   &block,   &block_params,   (struct icli_arg **) &block_args,   block_cmd},
 	{"unblock", &unblock, &unblock_params, (struct icli_arg **) &unblock_args, unblock_cmd},
+	{"load",    &load,    &load_params,    (struct icli_arg **) &load_args,    load_cmd},
+	//{"run",     &run,     &run_params,     (struct icli_arg **) &run_args,     run_cmd}, //currently causes segfault for no good reason
 };
 
 
