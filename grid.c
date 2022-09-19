@@ -42,7 +42,7 @@ int new_grid(int _width, int _height)
 
 int put_start(int x, int y)
 {
-	if (x < 0 || x >= width || y < 0 || y >= height)
+	if (x < 0 || x > width || y < 0 || y > height)
 	{
 		return 1;
 	}
@@ -55,7 +55,7 @@ int put_start(int x, int y)
 
 int put_goal(int x, int y)
 {
-        if (x < 0 || x >= width || y < 0 || y >= height)
+        if (x < 0 || x > width || y < 0 || y > height)
         {
                 return 1;
         }
@@ -63,6 +63,19 @@ int put_goal(int x, int y)
         goal.y = y;
 	goal_placed = 1;
 
+        return 0;
+}
+
+int set_tile(int x, int y, char block){
+	if (x < 0 || x >= width || y < 0 || y >= height)
+        {
+        	return 1;
+        }
+        if (blocks[x][y] == block)
+        {
+        	return 2;
+        }
+        blocks[x][y] = block;
         return 0;
 }
 

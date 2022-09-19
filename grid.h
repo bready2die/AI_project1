@@ -26,6 +26,8 @@ int put_start(int x, int y);
 
 int put_goal(int x, int y);
 
+int set_tile(int x, int y, char block);
+
 int load_file(char* filename);
 
 void clear_vertices();
