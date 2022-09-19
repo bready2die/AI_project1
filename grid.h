@@ -20,4 +20,20 @@ struct vertex // this setup may change, maybe
         //store lines for scene here? (this to parent, most likely)
 }
 
+int new_grid(int _width, int _height);
+
+int put_start(int x, int y);
+
+int put_goal(int x, int y);
+
+int load_file(char* filename);
+
+void clear_vertices();
+
+int get_hval(int x, int y, double* ret);
+
+int get_fval(int x, int y, double* ret);
+
+static void close_grid();//note:does not free the pointer itself
+
 #endif

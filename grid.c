@@ -68,29 +68,24 @@ int put_goal(int x, int y)
 
 int load_file(char* filename)
 {
-	if (!init)
-        {
-                close_grid();
-        }
-
-	//INIT new struct grid
 	FILE* file = fopen(filename, "r");
 	if (file == NULL)
 	{
 		//invalid file
 		return 1;
 	}
-	//int count; Maybe I'll add error handling later
-	fscanf(file, "%d %d ", &(start.x), &(start.y));
-	fscanf(file, "%d %d ", &(goal.x), &(goal.y));
-	fscanf(file, "%d %d ", &(width), &(height));
 	
-	goal_placed = 1;
-	start_placed = 1;
-	algo_ran = 0;
+	//Maybe I'll add error handling later
+	struct coords startbuf, goalbuf, sizebuf;
+	
+	fscanf(file, "%d %d ", &(startbuf.x), &(startbuf.y));
+	fscanf(file, "%d %d ", &(goalbuf.x), &(goalbuf.y));
+	fscanf(file, "%d %d ", &(sizebuf.x), &(sizebuf.y));
+	
+	new_grid(sizebuf.x, sizebuf.y);
+	put_start(startbuf.x, startbuf.y);
+	put_goal(goalbuf.x, goalbuf.y);
 
-	blocks = malloc(sizeof(char)*width*height);
-	
 	int buf1, buf2;
 	char buf3;
 	while (fscanf("%d %d %d ", &buf1, &buf2, &buf3) == 3)
@@ -102,10 +97,6 @@ int load_file(char* filename)
 			blocks[buf1*height + buf2] = buf3;
 		}
 	}
-
-	//init start vertex, I guess?
-	LIST_HEAD(closed_list);
-	heap_init(&fringe);
 
 	if (fclose(file))
 	init = 1;
@@ -180,10 +171,12 @@ void clear_vertices ()
 		//finish any vertex related business here, maybe clear scene lines
 		free(v);
 	}
+	
+	algo_ran = 0;
 	//TODO
 }
 
-int search_vertices(struct coords coords, struct vertex** output)
+static int search_vertices(struct coords coords, struct vertex** output)
 {
 	int test = heap_search(&fringe, coords, &output);
 	if (test)
@@ -232,7 +225,7 @@ int get_fval(int x, int y, double* ret)
         return 0;
 }
 
-void close_grid()//note:does not free the pointer itself
+static void close_grid()//note:does not free the pointer itself
 {
 	free(blocks);
 	clear_vertices();
