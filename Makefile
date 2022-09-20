@@ -1,9 +1,13 @@
 CC=gcc
 CFLAGS=-Wall -g 
 
-example: icli.o main.o gfx.o input.o window.o scene.o
-	$(CC) $(CFLAGS) ./main.o ./window.o ./icli.o ./gfx.o ./input.o ./scene.o -o path_finder -ledit -lX11
+example: icli.o main.o gfx.o input.o window.o scene.o grid.o heap.o
+	$(CC) $(CFLAGS) ./main.o ./window.o ./icli.o ./gfx.o ./grid.o ./heap.o ./input.o ./scene.o -o path_finder -ledit -lX11 -pthread
 
+heap.o:
+	$(CC) $(CFLAGS) -c ./heap.c
+grid.o:
+	$(CC) $(CFLAGS) -c ./grid.c
 scene.o:
 	$(CC) $(CFLAGS) -c ./scene.c
 window.o:
