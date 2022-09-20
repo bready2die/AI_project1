@@ -36,7 +36,7 @@ int addrect(struct rect *rect)
 	newrect->w = (PX_PER_SPACE * newrect->w);
 
 	pthread_mutex_lock(&scene_lock);
-	list_add(&newrect->list,&_scene_rects);
+	list_add_tail(&newrect->list,&_scene_rects);
 	pthread_mutex_unlock(&scene_lock);
 	
 	return 0;
@@ -79,7 +79,7 @@ int addline(struct line *line)
 	newline->y2 = (WIN_BORDER + (PX_PER_SPACE * newline->y2));
 
 	pthread_mutex_lock(&scene_lock);
-	list_add(&newline->list,&_scene_lines);
+	list_add_tail(&newline->list,&_scene_lines);
 	pthread_mutex_unlock(&scene_lock);
 
 	return 0;
@@ -122,7 +122,7 @@ int addpoint(struct point *point)
 	newpoint->y = (WIN_BORDER + (PX_PER_SPACE * newpoint->y));
 	
 	pthread_mutex_lock(&scene_lock);
-	list_add(&newpoint->list,&_scene_points);
+	list_add_tail(&newpoint->list,&_scene_points);
 	pthread_mutex_unlock(&scene_lock);
 
 	return 0;
@@ -192,16 +192,9 @@ int delcircle(struct circle *circle)
 	return 0;
 }
 
-void drawgrid()
+
+void drawdiag()
 {
-	for (int i = 0; i < grid_height + 1; i++) {
-		struct line line = GRID_LINE(0,i,grid_width,i);
-                addline(&line);
-        }
-        for (int i = 0; i < grid_width + 1; i++) {
-		struct line line = GRID_LINE(i,0,i,grid_height);
-                addline(&line);
-        }
 	for (int i = 0; i < grid_width; i++) {
 		struct line line = DIAG_LINE(MAX(0, i - grid_height),MIN(i, grid_height),i,0);
                 addline(&line);
@@ -213,7 +206,7 @@ void drawgrid()
         }
 
 	for (int i = 0; i < grid_width; i++) {
-		struct line line = DIAG_LINE(MIN(grid_width, grid_height - i),MIN(i, grid_height),grid_width - i, 0);
+		struct line line = DIAG_LINE(MIN(grid_width, grid_width - (i - grid_height)),MIN(i, grid_height),grid_width - i, 0);
                 addline(&line);
         }
 	
@@ -221,19 +214,24 @@ void drawgrid()
 		struct line line = DIAG_LINE(MIN(grid_width,(grid_height - i)),MIN(i + grid_width, grid_height),0, i);
 		addline(&line);
 	}
-	
 }
-
-void delgrid()
+void drawgrid()
 {
+	drawdiag();
+	
 	for (int i = 0; i < grid_height + 1; i++) {
 		struct line line = GRID_LINE(0,i,grid_width,i);
-                delline(&line);
+                addline(&line);
         }
         for (int i = 0; i < grid_width + 1; i++) {
 		struct line line = GRID_LINE(i,0,i,grid_height);
-                delline(&line);
+                addline(&line);
         }
+		
+}
+
+void deldiag()
+{
 	for (int i = 0; i < grid_width; i++) {
 		struct line line = DIAG_LINE(MAX(0, i - grid_height),MIN(i, grid_height),i,0);
                 delline(&line);
@@ -243,7 +241,7 @@ void delgrid()
                 delline(&line);
         }
 	for (int i = 0; i < grid_width; i++) {
-		struct line line = DIAG_LINE(MIN(grid_width, grid_height - i),MIN(i, grid_height),grid_width - i, 0);
+		struct line line = DIAG_LINE(MIN(grid_width, grid_width - (i - grid_height)),MIN(i, grid_height),grid_width - i, 0);
                 delline(&line);
         }
 	
@@ -251,6 +249,21 @@ void delgrid()
 		struct line line = DIAG_LINE(MIN(grid_width,(grid_height - i)),MIN(i + grid_width, grid_height),0, i);
 		delline(&line);
 	}
+}
+
+void delgrid()
+{
+	deldiag();
+	
+	for (int i = 0; i < grid_height + 1; i++) {
+		struct line line = GRID_LINE(0,i,grid_width,i);
+                delline(&line);
+        }
+        for (int i = 0; i < grid_width + 1; i++) {
+		struct line line = GRID_LINE(i,0,i,grid_height);
+                delline(&line);
+        }
+
 }
 
 int redraw_scene()
