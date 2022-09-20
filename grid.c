@@ -4,6 +4,7 @@
 #include "linux_list.h"
 #include "grid.h"
 #include "heap.h"
+#include "scene.h"
 
 //NOTE: NONE of this has been bug tested.
 

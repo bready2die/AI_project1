@@ -18,7 +18,7 @@ struct vertex // this setup may change, maybe
         struct list_head list;
 
         //store lines for scene here? (this to parent, most likely)
-}
+};
 
 int new_grid(int _width, int _height);
 
