@@ -1,6 +1,8 @@
 #ifndef GRID_H
 #define GRID_H 1
 
+#include "linux_list.h"
+
 struct coords
 {
         int x, y;

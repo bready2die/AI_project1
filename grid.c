@@ -72,11 +72,11 @@ int set_tile(int x, int y, char block){
         {
         	return 1;
         }
-        if (blocks[x][y] == block)
+        if (blocks[(x-1)*height+y-1] == block)
         {
         	return 2;
         }
-        blocks[x][y] = block;
+        blocks[(x-1)*height+y-1] = block;
         return 0;
 }
 
@@ -102,7 +102,7 @@ int load_file(char* filename)
 
 	int buf1, buf2;
 	char buf3;
-	while (fscanf("%d %d %d ", &buf1, &buf2, &buf3) == 3)
+	while (fscanf(file, "%d %d %d ", &buf1, &buf2, (int*) &buf3) == 3)
 	{
 		if (buf1 > 0 && buf1 <= width || buf2 > 0 && buf2 <= height)
 		{
@@ -192,13 +192,14 @@ void clear_vertices ()
 
 static int search_vertices(struct coords coords, struct vertex** output)
 {
-	int test = heap_search(&fringe, coords, &output);
+	int test = heap_search(&fringe, coords, output);
 	if (test)
 	{
+		struct list_head* i;
 		list_for_each(i, &closed_list)
 		{
 			struct vertex* v = list_entry(i, struct vertex, list);
-			if (COORDS_CMP(vertex->position, coords))
+			if (COORDS_CMP((*output)->position, coords))
 			{
 				test = 0;
 				*output = v;
