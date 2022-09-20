@@ -6,15 +6,28 @@
 #include "heap.h"
 #include "scene.h"
 
-//NOTE: NONE of this has been bug tested.
 
 static int width, height;
 static struct coords start, goal;
 static char goal_placed, start_placed, algo_ran;
 static char init = 0;
+
 static char* blocks; //grid noting blocked tiles.
+
 static struct list_head closed_list;
 static struct heap fringe;
+
+static struct circle start_circle;
+static struct circle goal_circle;
+static struct list_head block_rects_list;
+
+static struct block
+{
+	struct coords position;
+	struct rect rect_block;
+	struct list_head list;
+};
+
 
 int new_grid(int _width, int _height)
 {
@@ -35,7 +48,11 @@ int new_grid(int _width, int _height)
 	blocks = malloc(sizeof(char)*width*height);
 	memset(blocks, 0, width*height);
 	LIST_HEAD(closed_list);
+	LIST_HEAD(block_rects_list);
 	heap_init(&fringe);
+	
+	resize_window(_width, _height);
+	redraw_scene();
 
 	init = 1;
 	return 0;
@@ -43,12 +60,21 @@ int new_grid(int _width, int _height)
 
 int put_start(int x, int y)
 {
-	if (x < 0 || x > width || y < 0 || y > height)
+	if (x < 1 || x > width || y < 1 || y > height)
 	{
 		return 1;
 	}
 	start.x = x;
 	start.y = y;
+	
+	//graphics
+	struct circle circle = START_CIRCLE( (int)(x-1), (int)(y-1), CIRCLE_RAD);
+	if (goal_placed)
+		delcircle(&start_circle);
+	memcpy(&start_circle, &circle, sizeof(struct circle));
+	addcircle(&circle);
+	redraw_scene();
+	
 	start_placed = 1;
 
 	return 0;
@@ -56,19 +82,28 @@ int put_start(int x, int y)
 
 int put_goal(int x, int y)
 {
-        if (x < 0 || x > width || y < 0 || y > height)
+        if (x < 1 || x > width || y < 1 || y > height)
         {
                 return 1;
         }
         goal.x = x;
         goal.y = y;
+        
+        //graphics
+	struct circle circle = GOAL_CIRCLE( (int)(x-1), (int)(y-1), CIRCLE_RAD);
+	if (goal_placed)
+		delcircle(&goal_circle);
+	memcpy(&goal_circle, &circle, sizeof(struct circle));
+	addcircle(&circle);
+	redraw_scene();
+        
 	goal_placed = 1;
 
         return 0;
 }
 
 int set_tile(int x, int y, char block){
-	if (x < 0 || x >= width || y < 0 || y >= height)
+	if (x < 1 || x >= width || y < 1 || y >= height)
         {
         	return 1;
         }
@@ -77,6 +112,15 @@ int set_tile(int x, int y, char block){
         	return 2;
         }
         blocks[(x-1)*height+y-1] = block;
+        
+        //graphics
+        if (block)
+        {
+        	//add block	
+        } else {
+        	//remove block
+        }
+        
         return 0;
 }
 
@@ -106,9 +150,7 @@ int load_file(char* filename)
 	{
 		if (buf1 > 0 && buf1 <= width || buf2 > 0 && buf2 <= height)
 		{
-			buf1--;
-			buf2--;
-			blocks[buf1*height + buf2] = buf3;
+			set_tile(buf1, buf2, buf3);
 		}
 	}
 
@@ -183,6 +225,9 @@ void clear_vertices ()
 		v = list_entry(i, struct vertex, list);
 		list_del(i);
 		//finish any vertex related business here, maybe clear scene lines
+		if (v->path_line)
+			delline(v->path_line);
+		
 		free(v);
 	}
 	
@@ -240,9 +285,39 @@ int get_fval(int x, int y, double* ret)
         return 0;
 }
 
+int make_path(struct vertex* goal)
+{
+	struct vertex* ptr = goal;
+	while (1)
+	{
+		if (!(ptr->parent) || COORDS_CMP(ptr->parent->position, ptr->position) )
+		{
+			break;
+		}
+		struct line line = PATH_LINE(ptr->position.x, ptr->position.y, 
+					ptr->parent->position.x, ptr->parent->position.y)
+		memcpy(&(ptr->path_line), &line, sizeof(struct line));
+		addline(&(ptr->path_line));
+		
+		ptr = ptr->parent;
+	}
+	
+	redraw_scene();
+	return 0;
+}
+
 static void close_grid()//note:does not free the pointer itself
 {
+	for (int i = 0; i < width*height; i++)
+	{
+		set_tile(i/height+1, i%height+1, 0);
+	}
 	free(blocks);
+	if (goal_placed)
+		delcircle(&goal_circle);
+	if (start_placed)
+		delcircle(&start_circle);
+	
 	clear_vertices();
 	heap_destroy(&fringe);
 }

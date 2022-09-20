@@ -18,8 +18,9 @@ struct vertex // this setup may change, maybe
         double h; //heuristic (estimated distance from vertex to goal)
         struct vertex* parent;
         struct list_head list;
-
+        
         //store lines for scene here? (this to parent, most likely)
+        struct line path_line;
 };
 
 int new_grid(int _width, int _height);
@@ -37,6 +38,9 @@ void clear_vertices();
 int get_hval(int x, int y, double* ret);
 
 int get_fval(int x, int y, double* ret);
+
+int make_path(struct vertex* goal);
+//run this one on the goal to create a path ending at the goal
 
 static void close_grid();//note:does not free the pointer itself
 
