@@ -53,46 +53,6 @@ struct icli_params params = {
 	.err_hook = cli_err_hook,
 };
 
-
-/*
-  int pathfinder_register_commands()
-  {
-  int ret;
-  ret=icli_register_command(&goal_params, &goal);
-  if (ret) {
-  fprintf(stderr, "Unable to register command: %s\n", goal_params.name);
-  ret = EXIT_FAILURE;
-  goto out;
-  }
-  ret=icli_register_command(&start_params, &start);
-  if (ret) {
-  fprintf(stderr, "Unable to register command: %s\n", start_params.name);
-  ret = EXIT_FAILURE;
-  goto out;
-  }
-  icli_commands_to_dot("path.dot");
-  out:
-  return ret;
-  }
-*/
-/*
-  int pathfinder_register_commands()
-  {
-  int ret;
-  for(int i = 0; i < ARRAY_SIZE(cmd_list); i++) {
-  ret = icli_register_command(cmd_list[i].cmd_params,cmd_list[i].cmd);
-  if (ret) {
-  fprintf(stderr, "Unable to register command: %s\n", cmd_list[i].name);
-  ret = EXIT_FAILURE;
-  goto out;
-  }
-  }
-  icli_commands_to_dot("path.dot");
-  out:
-  return ret;
-  }
-*/
-
 int main(int argc, char **argv)
 {
 	int res;
