@@ -343,17 +343,20 @@ static struct icli_command_params load_params = {
 
 static enum icli_ret run_cmd(char **argv, int argc, void *context)
 {
+	
 	icli_printf("command not yet implemented\n");
 	return ICLI_OK;
 }
 
-struct icli_arg_val run_arg_vals[] = {
-	{.val = "astar"},
-	{.val = "theta"},
+static struct icli_arg_val run_arg_vals[] = {
+	{.val = "astar", .help = "run the A\* algorithm"},
+	{.val = "theta", .help = "run the theta\* algorithm"},
+	{.val = NULL},
 };
 
 static struct icli_arg run_args[] = {
-	{.type = AT_Val, .vals = run_arg_vals, .help = "name of algorithm to run" },
+	{.type = AT_Val, .vals = run_arg_vals, .help = "name of algorithm to run:" },
+	//{.type = AT_None, .help = "name of algorithm to run" },
 };
 
 static struct icli_command_params run_params = {
@@ -374,7 +377,7 @@ struct command_list cmd_list[] = {
 	{"block",   &block,   &block_params,   (struct icli_arg **) &block_args,   block_cmd},
 	{"unblock", &unblock, &unblock_params, (struct icli_arg **) &unblock_args, unblock_cmd},
 	{"load",    &load,    &load_params,    (struct icli_arg **) &load_args,    load_cmd},
-	//{"run",     &run,     &run_params,     (struct icli_arg **) &run_args,     run_cmd}, //currently causes segfault for no good reason
+	{"run",     &run,     &run_params,     (struct icli_arg **) &run_args,     run_cmd}, //currently causes segfault for no good reason
 };
 
 
