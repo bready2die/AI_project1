@@ -19,15 +19,8 @@ static struct heap fringe;
 
 static struct circle start_circle;
 static struct circle goal_circle;
-static struct list_head block_rects_list;
 
-static struct block
-{
-	struct coords position;
-	struct rect rect_block;
-	struct list_head list;
-};
-
+static void close_grid();
 
 int new_grid(int _width, int _height)
 {
@@ -48,7 +41,6 @@ int new_grid(int _width, int _height)
 	blocks = malloc(sizeof(char)*width*height);
 	memset(blocks, 0, width*height);
 	LIST_HEAD(closed_list);
-	LIST_HEAD(block_rects_list);
 	heap_init(&fringe);
 	
 	resize_window(_width, _height);
@@ -114,11 +106,15 @@ int set_tile(int x, int y, char block){
         blocks[(x-1)*height+y-1] = block;
         
         //graphics
+        struct rect rect = BLOCK_RECT(x, y);
         if (block)
         {
-        	//add block	
+        	//add block
+        	addrect(&rect);
+        		
         } else {
         	//remove block
+        	delrect(&rect);
         }
         
         return 0;
@@ -148,7 +144,7 @@ int load_file(char* filename)
 	char buf3;
 	while (fscanf(file, "%d %d %d ", &buf1, &buf2, (int*) &buf3) == 3)
 	{
-		if (buf1 > 0 && buf1 <= width || buf2 > 0 && buf2 <= height)
+		if (buf1 > 0 && buf1 <= width && buf2 > 0 && buf2 <= height)
 		{
 			set_tile(buf1, buf2, buf3);
 		}
@@ -159,7 +155,7 @@ int load_file(char* filename)
 	return 0;
 }
 
-static int succ(struct coords pos, struct coords* buffer) //returns successor count
+int succ(struct coords pos, struct coords* buffer) //returns successor count
 {
 	int count = 0;
 
@@ -225,8 +221,7 @@ void clear_vertices ()
 		v = list_entry(i, struct vertex, list);
 		list_del(i);
 		//finish any vertex related business here, maybe clear scene lines
-		if (v->path_line)
-			delline(v->path_line);
+		delline(&(v->path_line)); ///seems iffy, considering rogue data
 		
 		free(v);
 	}
@@ -295,10 +290,10 @@ int make_path(struct vertex* goal)
 			break;
 		}
 		struct line line = PATH_LINE(ptr->position.x, ptr->position.y, 
-					ptr->parent->position.x, ptr->parent->position.y)
+					ptr->parent->position.x, ptr->parent->position.y);
 		memcpy(&(ptr->path_line), &line, sizeof(struct line));
 		addline(&(ptr->path_line));
-		
+	
 		ptr = ptr->parent;
 	}
 	

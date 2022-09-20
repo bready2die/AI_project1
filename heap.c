@@ -150,4 +150,5 @@ int heap_debug_print(struct heap* h){
                 printf("%f ", h->array[i]->value);
         }
 	printf("\n");
+	return 0;
 }
