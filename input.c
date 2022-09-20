@@ -63,7 +63,12 @@ static enum icli_ret goal_cmd(char **argv, int argc, void *context)
 		icli_err_printf("Invalid or out of range y operand\n");
 		return ICLI_ERR;
 	}
-	
+#ifdef TEST_GRID
+	if(putgoal(x,y)) {
+		icli_err_printf("error placing goal\n");
+		return ICLI_ERR;
+	}
+#else
 #ifdef TEST_GRAPHICS
 	//struct circle circle = GOAL_CIRCLE( 3 +((int)x*10), 3 + ((int)y*10), 5);
 	struct circle circle = GOAL_CIRCLE( (int)x, (int)y, CIRCLE_RAD);
@@ -73,8 +78,10 @@ static enum icli_ret goal_cmd(char **argv, int argc, void *context)
 	memcpy(&goal_circle, &circle, sizeof(struct circle));
 	addcircle(&circle);
 	redraw_scene();
-#endif
+#else
 	icli_printf("goal not yet implemented\n");
+#endif
+#endif
 		
 	return ICLI_OK;
 }
@@ -118,7 +125,12 @@ static enum icli_ret start_cmd(char **argv, int argc, void *context)
 		icli_err_printf("Invalid or out of range y operand\n");
 		return ICLI_ERR;
 	}
-
+#ifdef TEST_GRID
+	if(putstart(x,y)) {
+		icli_err_printf("error placing start\n");
+		return ICLI_ERR;
+	}
+#else
 #ifdef TEST_GRAPHICS
 	struct circle circle = START_CIRCLE( (int)x,(int)y, CIRCLE_RAD);
 	if (start_set)
@@ -127,9 +139,10 @@ static enum icli_ret start_cmd(char **argv, int argc, void *context)
 	memcpy(&start_circle, &circle, sizeof(struct circle));
 	addcircle(&circle);
 	redraw_scene();
-#endif
-
+#else
 	icli_printf("start not yet implemented\n");
+#endif
+#endif
 		
 	return ICLI_OK;
 }
@@ -190,15 +203,21 @@ static enum icli_ret resize_cmd(char **argv, int argc, void *context)
 		icli_err_printf("y operand invalid value or larger than max of %d\n", MAX_GRID_HEIGHT);
 		return ICLI_ERR;
 	}
-	
-        icli_printf("resizing window...\n");
-	
+	icli_printf("resizing window...\n");
+#ifdef TEST_GRID
+	if(resize_grid(x,y)) {
+		icli_err_printf("error resizing grid\n");
+		return ICLI_ERR;
+	}
+#else	
 #ifdef TEST_GRAPHICS
 	//these line will be moved into grid.c when it's ready
 	resize_window(x,y);
 	redraw_scene();
+#else
+	icli_printf("resize command not implemented yet\n");
 #endif
-	
+#endif	
 	return ICLI_OK;
 }
 
@@ -240,6 +259,12 @@ static enum icli_ret block_cmd(char **argv, int argc, void *context)
 	
 	icli_printf("adding block...\n");
 
+#ifdef TEST_GRID
+	if(block(x,y)) {
+		icli_err_printf("error blocking tile\n");
+		return ICLI_ERR;
+	}
+#else	
 #ifdef TEST_GRAPHICS
 	//this is only for testing purposes, what goes in graph.c
 	//MUST check for the presence of a block
@@ -247,7 +272,7 @@ static enum icli_ret block_cmd(char **argv, int argc, void *context)
 	addrect(&rect);
 	redraw_scene();
 #endif
-	
+#endif
 	return ICLI_OK;
 	
 }
@@ -288,12 +313,19 @@ static enum icli_ret unblock_cmd(char **argv, int argc, void *context)
 	}
 	
 	icli_printf("removing block...\n");
+#ifdef TEST_GRID
+	if(unblock(x,y)) {
+		icli_err_printf("error unblocking tile\n");
+		return ICLI_ERR;
+	}
+#else	
 #ifdef TEST_GRAPHICS
 	//this is only for testing purposes, what goes in graph.c
 	//MUST check for the presence of a block
 	struct rect rect = BLOCK_RECT(x,y);
 	delrect(&rect);
 	redraw_scene();
+#endif
 #endif
 	
 	return ICLI_OK;
@@ -343,8 +375,14 @@ static struct icli_command_params load_params = {
 
 static enum icli_ret run_cmd(char **argv, int argc, void *context)
 {
-	
+#ifdef TEST_GRID
+	if(run_algo(argv[0])) {
+		icli_err_printf("error blocking tile\n");
+		return ICLI_ERR;
+	}
+#else		
 	icli_printf("command not yet implemented\n");
+#endif
 	return ICLI_OK;
 }
 
