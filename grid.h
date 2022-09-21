@@ -5,8 +5,8 @@
 #include "scene.h"
 #include "heap.h"
 
-struct list_head closed_list;
-struct heap fringe;
+extern struct list_head closed_list;
+extern struct heap fringe;
 
 struct coords
 {

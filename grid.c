@@ -15,8 +15,8 @@ static char init = 0;
 
 static char* blocks; //grid noting blocked tiles.
 
-extern struct list_head closed_list;
-extern struct heap fringe;
+struct list_head closed_list;
+struct heap fringe;
 
 static struct circle start_circle;
 static struct circle goal_circle;
