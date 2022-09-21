@@ -13,7 +13,7 @@ static struct coords start, goal;
 static char goal_placed, start_placed, algo_ran;
 static char init = 0;
 
-char* blocks; //grid noting blocked tiles.
+static char* blocks; //grid noting blocked tiles.
 
 struct list_head closed_list;
 struct heap fringe;

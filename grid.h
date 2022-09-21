@@ -5,8 +5,6 @@
 #include "scene.h"
 #include "heap.h"
 
-char* blocks; //grid noting blocked tiles.
-
 struct list_head closed_list;
 struct heap fringe;
 
