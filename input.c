@@ -205,7 +205,7 @@ static enum icli_ret resize_cmd(char **argv, int argc, void *context)
 	}
 	icli_printf("resizing window...\n");
 #ifdef TEST_GRID
-	if(resize_grid(x,y)) {
+	if(new_grid(x,y)) {
 		icli_err_printf("error resizing grid\n");
 		return ICLI_ERR;
 	}
