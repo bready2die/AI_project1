@@ -20,7 +20,7 @@ static struct icli_command *start;
 static struct icli_command *block;
 static struct icli_command *unblock;
 static struct icli_command *clear;
-static struct icli_command *get_values;
+static struct icli_command *getvals;
 static struct icli_command *run;
 static struct icli_command *load;
 static struct icli_command *resize;
@@ -37,7 +37,7 @@ static int check_number(int val,int range)
 {
 	if ((errno == ERANGE && (val == LONG_MAX || val == LONG_MIN))
 	    || (errno != 0 && val == 0) || val > range || val < 1) {
-		perror("strtol");
+		//perror("strtol");
 		return EXIT_FAILURE;
 	}
 	return 0;
@@ -260,7 +260,7 @@ static enum icli_ret block_cmd(char **argv, int argc, void *context)
 	icli_printf("adding block...\n");
 
 #ifdef TEST_GRID
-	if(block(x,y)) {
+	if(set_tile(x,y,1)) {
 		icli_err_printf("error blocking tile\n");
 		return ICLI_ERR;
 	}
@@ -314,7 +314,7 @@ static enum icli_ret unblock_cmd(char **argv, int argc, void *context)
 	
 	icli_printf("removing block...\n");
 #ifdef TEST_GRID
-	if(unblock(x,y)) {
+	if(set_tile(x,y,0)) {
 		icli_err_printf("error unblocking tile\n");
 		return ICLI_ERR;
 	}
@@ -407,6 +407,58 @@ static struct icli_command_params run_params = {
 	.argv = run_args,
 };
 
+static enum icli_ret getvals_cmd(char **argv, int argc, void *context)
+{
+	long x = 0;
+	long y = 0;
+	char *endptr;
+	double hval;
+	double fval;
+	errno = 0;
+	x = strtol(argv[0], &endptr, 10);
+	if(check_number(x,grid_width) || *endptr != '\0') {
+		icli_err_printf("Invalid or out of range x operand\n");
+		return ICLI_ERR;
+	}
+	
+	endptr = NULL;
+	errno = 0;
+	y = strtol(argv[1], &endptr, 10);
+	if(check_number(y, grid_height) || *endptr != '\0') {
+		icli_err_printf("Invalid or out of range y operand\n");
+		return ICLI_ERR;
+	}
+#ifdef TEST_GRID
+	if(get_hval(x,y,&hval)) {
+		icli_err_printf("error getting hval\n");
+		return ICLI_ERR;
+	}
+	if(get_fval(x,y,&fval)) {
+		icli_err_printf("error getting fval\n");
+		return ICLI_ERR;
+	}
+	icli_printf("(%ld,%ld)\n\thval:%f.10\n\tfval:%f.10\n",x,y,hval,fval);
+#else		
+	icli_printf("command not yet implemented\n");
+#endif
+	return ICLI_OK;
+}
+
+static struct icli_arg getvals_args[] = {
+	{.type = AT_None, .help = "x value"},
+	{.type = AT_None, .help = "y value"},
+};
+
+static struct icli_command_params getvals_params = {
+	.parent     =   NULL,
+	.name       =   "getvals",
+	.short_name =   "getvals",
+	.help       =   "get h and f values of coordinate",
+	.command    =   getvals_cmd,
+	.argc       =   2,
+	.argv       =   getvals_args,
+};
+
 struct command_list cmd_list[] = {
 	{"goal",    &goal,    &goal_params,    (struct icli_arg **) &goal_args,    goal_cmd},
 	{"start",   &start,   &start_params,   (struct icli_arg **) &start_args,   start_cmd},
@@ -416,6 +468,7 @@ struct command_list cmd_list[] = {
 	{"unblock", &unblock, &unblock_params, (struct icli_arg **) &unblock_args, unblock_cmd},
 	{"load",    &load,    &load_params,    (struct icli_arg **) &load_args,    load_cmd},
 	{"run",     &run,     &run_params,     (struct icli_arg **) &run_args,     run_cmd},
+	{"getvals", &getvals, &getvals_params, (struct icli_arg **) &getvals_args, getvals_cmd},
 };
 
 
