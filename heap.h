@@ -3,6 +3,8 @@
 
 #include "grid.h"
 
+struct coords;
+
 struct node {
 	struct vertex* element;
 	double value;

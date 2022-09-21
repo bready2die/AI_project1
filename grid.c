@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <limits.h>
 #include "linux_list.h"
 #include "grid.h"
 #include "heap.h"
@@ -12,10 +13,10 @@ static struct coords start, goal;
 static char goal_placed, start_placed, algo_ran;
 static char init = 0;
 
-static char* blocks; //grid noting blocked tiles.
+char* blocks; //grid noting blocked tiles.
 
-static struct list_head closed_list;
-static struct heap fringe;
+struct list_head closed_list;
+struct heap fringe;
 
 static struct circle start_circle;
 static struct circle goal_circle;
@@ -72,6 +73,16 @@ int put_start(int x, int y)
 	return 0;
 }
 
+int get_start(int* x, int* y){
+	if (!start_placed)
+	{
+		return 1;
+	}
+	*x = start.x;
+	*y = start.y;
+	return 0;
+}
+
 int put_goal(int x, int y)
 {
         if (x < 1 || x > width || y < 1 || y > height)
@@ -94,7 +105,18 @@ int put_goal(int x, int y)
         return 0;
 }
 
-int set_tile(int x, int y, char block){
+int get_goal(int* x, int* y){
+	if (!goal_placed)
+	{
+		return 1;
+	}
+	*x = goal.x;
+	*y = goal.y;
+	return 0;
+}
+
+int set_tile(int x, int y, char block)
+{
 	if (x < 1 || x >= width || y < 1 || y >= height)
         {
         	return 1;
@@ -104,20 +126,30 @@ int set_tile(int x, int y, char block){
         	return 2;
         }
         blocks[(x-1)*height+y-1] = block;
-        
+
         //graphics
         struct rect rect = BLOCK_RECT(x, y);
         if (block)
         {
         	//add block
         	addrect(&rect);
-        		
+
         } else {
         	//remove block
         	delrect(&rect);
         }
-        
+
         return 0;
+}
+
+int get_tile(int x, int y, char* block)
+{
+	if (x < 1 || x >= width || y < 1 || y >= height)
+	{
+		return 1;
+	}
+	*block = blocks[(x-1)*height+y-1];
+	return 0;
 }
 
 int load_file(char* filename)
@@ -210,6 +242,18 @@ int succ(struct coords pos, struct coords* buffer) //returns successor count
 	return count;
 }
 
+int init_vertex(int x, int y, struct vertex* buffer)
+{
+	buffer->position = (struct coords){.x = x, .y = y};
+	buffer->g = INT_MAX;
+	//buffer->h must be defined later
+	buffer->parent = NULL;
+
+	buffer->has_line = 0;
+
+	return 0;
+}
+
 void clear_vertices ()
 {
 	struct list_head* i;
@@ -221,7 +265,8 @@ void clear_vertices ()
 		v = list_entry(i, struct vertex, list);
 		list_del(i);
 		//finish any vertex related business here, maybe clear scene lines
-		delline(&(v->path_line)); ///seems iffy, considering rogue data
+		if (v->has_line)
+			delline(&(v->path_line));
 		
 		free(v);
 	}
@@ -230,7 +275,7 @@ void clear_vertices ()
 	//TODO
 }
 
-static int search_vertices(struct coords coords, struct vertex** output)
+int search_vertices(struct coords coords, struct vertex** output)
 {
 	int test = heap_search(&fringe, coords, output);
 	if (test)
@@ -293,6 +338,8 @@ int make_path(struct vertex* goal)
 					ptr->parent->position.x, ptr->parent->position.y);
 		memcpy(&(ptr->path_line), &line, sizeof(struct line));
 		addline(&(ptr->path_line));
+
+		ptr->has_line = 1;
 	
 		ptr = ptr->parent;
 	}

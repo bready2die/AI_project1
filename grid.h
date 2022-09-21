@@ -3,6 +3,12 @@
 
 #include "linux_list.h"
 #include "scene.h"
+#include "heap.h"
+
+char* blocks; //grid noting blocked tiles.
+
+struct list_head closed_list;
+struct heap fringe;
 
 struct coords
 {
@@ -29,15 +35,25 @@ int new_grid(int _width, int _height); // makes a new grid, replacing any old on
 
 int put_start(int x, int y);
 
+int get_start(int* x, int* y);
+
 int put_goal(int x, int y);
 
+int get_goal(int* x, int* y);
+
 int set_tile(int x, int y, char block); // set tile status: 0 for unblocked, 1 for blocked
+
+int get_tile(int x, int y, char* block);
 
 int load_file(char* filename);
 
 int succ(struct coords pos, struct coords* buffer); //returns successor count. All output coords are stored to buffer.
 
+int init_vertex(int x, int y, struct vertex* buffer);//NOTE: the .h value must be explicitly initialized afterwards, as it is dependent on the algorithm.
+
 void clear_vertices(); //removes all vertex and path information, effectively undos search
+
+int search_vertices(struct coords coords, struct vertex** output);
 
 int get_hval(int x, int y, double* ret);
 
@@ -45,5 +61,7 @@ int get_fval(int x, int y, double* ret);
 
 int make_path(struct vertex* goal);
 //run this one on the goal to create a path ending at the goal
+
+
 
 #endif
