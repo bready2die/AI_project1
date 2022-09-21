@@ -15,8 +15,8 @@ static char init = 0;
 
 static char* blocks; //grid noting blocked tiles.
 
-struct list_head closed_list;
-struct heap fringe;
+extern struct list_head closed_list;
+extern struct heap fringe;
 
 static struct circle start_circle;
 static struct circle goal_circle;
@@ -25,7 +25,7 @@ static void close_grid();
 
 int new_grid(int _width, int _height)
 {
-	if (!init)
+	if (init)
 	{
 		close_grid();
 	}
@@ -49,6 +49,11 @@ int new_grid(int _width, int _height)
 
 	init = 1;
 	return 0;
+}
+
+int reset_grid()
+{
+	return new_grid(width, height);
 }
 
 int put_start(int x, int y)
@@ -348,7 +353,7 @@ int make_path(struct vertex* goal)
 	return 0;
 }
 
-static void close_grid()//note:does not free the pointer itself
+static void close_grid()
 {
 	for (int i = 0; i < width*height; i++)
 	{

@@ -31,6 +31,8 @@ struct vertex // this setup may change, maybe
 
 int new_grid(int _width, int _height); // makes a new grid, replacing any old one
 
+int reset_grid();//new_grid, but keeps the same width and height
+
 int put_start(int x, int y);
 
 int get_start(int* x, int* y);
