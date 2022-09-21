@@ -64,7 +64,7 @@ static enum icli_ret goal_cmd(char **argv, int argc, void *context)
 		return ICLI_ERR;
 	}
 #ifdef TEST_GRID
-	if(putgoal(x,y)) {
+	if(put_goal(x,y)) {
 		icli_err_printf("error placing goal\n");
 		return ICLI_ERR;
 	}
@@ -126,7 +126,7 @@ static enum icli_ret start_cmd(char **argv, int argc, void *context)
 		return ICLI_ERR;
 	}
 #ifdef TEST_GRID
-	if(putstart(x,y)) {
+	if(put_start(x,y)) {
 		icli_err_printf("error placing start\n");
 		return ICLI_ERR;
 	}
