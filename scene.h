@@ -20,14 +20,16 @@ extern int grid_height;
 
 
 
+#define GRID_MWIDTH ( grid_width - 1)
 
+#define GRID_MHEIGHT ( grid_height - 1)
 
 #define WIN_BORDER 5
 
 #define PX_PER_SPACE 10 
 
-#define WINHEIGHT ((2 * (WIN_BORDER)) + (PX_PER_SPACE) * grid_height)
-#define WINWIDTH ((2 * (WIN_BORDER)) + (PX_PER_SPACE) * grid_width)
+#define WINHEIGHT ((2 * (WIN_BORDER)) + (PX_PER_SPACE) * GRID_MHEIGHT)
+#define WINWIDTH ((2 * (WIN_BORDER)) + (PX_PER_SPACE) * GRID_MWIDTH)
 
 #define CIRCLE_RAD 4
 
@@ -78,14 +80,14 @@ do {						\
 				
 #define GOAL_CIRCLE( _x, _y, _rad)				\
 ({								\
-	_MAKE_CIRCLE(___temp_circle,(_x),(_y),(_rad));		\
+	_MAKE_CIRCLE(___temp_circle,(_x) - 1,(_y) - 1,(_rad));	\
 	_COLOR_SHAPE(___temp_circle,GOAL_R,GOAL_G,GOAL_B);	\
 	___temp_circle;						\
 })
 
 #define START_CIRCLE( _x, _y, _rad)				\
 ({								\
-	_MAKE_CIRCLE(___temp_circle,(_x),(_y),(_rad));		\
+	_MAKE_CIRCLE(___temp_circle,(_x) - 1 ,(_y) - 1,(_rad));	\
 	_COLOR_SHAPE(___temp_circle,START_R,START_G,START_B);	\
 	___temp_circle;						\
 })
@@ -100,18 +102,18 @@ do {						\
 		  .y2 = (__y2),				\
 	  }
 
-#define BLOCKING_LINE(_x1, _y1, _x2, _y2)			\
-({								\
-	_MAKE_LINE(___temp_line,(_x1),(_y1),(_x2),(_y2));	\
-	_COLOR_SHAPE(___temp_line,BLOCK_R,BLOCK_G,BLOCK_B);	\
-	___temp_line;						\
+#define BLOCKING_LINE(_x1, _y1, _x2, _y2)					\
+({										\
+	_MAKE_LINE(___temp_line,(_x1) - 1,(_y1) - 1,(_x2) - 1,(_y2) - 1);	\
+	_COLOR_SHAPE(___temp_line,BLOCK_R,BLOCK_G,BLOCK_B);			\
+	___temp_line;								\
 })
 
-#define PATH_LINE(_x1, _y1, _x2, _y2)				\
-({								\
-	_MAKE_LINE(___temp_line,(_x1),(_y1),(_x2),(_y2));	\
-	_COLOR_SHAPE(___temp_line,PATH_R,PATH_G,PATH_B);	\
-	___temp_line;						\
+#define PATH_LINE(_x1, _y1, _x2, _y2)						\
+({										\
+	_MAKE_LINE(___temp_line,(_x1) - 1,(_y1) - 1,(_x2) - 1,(_y2) - 1);	\
+	_COLOR_SHAPE(___temp_line,PATH_R,PATH_G,PATH_B);			\
+	___temp_line;								\
 })
 
 #define GRID_LINE(_x1, _y1, _x2, _y2)				\
@@ -138,7 +140,7 @@ do {						\
 
 #define BLOCK_RECT(_x,_y)					\
 ({								\
-	_MAKE_RECT(___temp_rect,(_x),(_y),1,1);			\
+	_MAKE_RECT(___temp_rect,(_x) - 1,(_y) - 1,1,1);		\
 	_COLOR_SHAPE(___temp_rect,BLOCK_R,BLOCK_G,BLOCK_B);	\
 	___temp_rect;						\
 })

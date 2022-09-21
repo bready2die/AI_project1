@@ -36,7 +36,7 @@ static struct circle goal_circle;
 static int check_number(int val,int range)
 {
 	if ((errno == ERANGE && (val == LONG_MAX || val == LONG_MIN))
-	    || (errno != 0 && val == 0) || val > range || val < 0) {
+	    || (errno != 0 && val == 0) || val > range || val < 1) {
 		perror("strtol");
 		return EXIT_FAILURE;
 	}
@@ -415,7 +415,7 @@ struct command_list cmd_list[] = {
 	{"block",   &block,   &block_params,   (struct icli_arg **) &block_args,   block_cmd},
 	{"unblock", &unblock, &unblock_params, (struct icli_arg **) &unblock_args, unblock_cmd},
 	{"load",    &load,    &load_params,    (struct icli_arg **) &load_args,    load_cmd},
-	{"run",     &run,     &run_params,     (struct icli_arg **) &run_args,     run_cmd}, //currently causes segfault for no good reason
+	{"run",     &run,     &run_params,     (struct icli_arg **) &run_args,     run_cmd},
 };
 
 

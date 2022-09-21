@@ -196,22 +196,22 @@ int delcircle(struct circle *circle)
 void drawdiag()
 {
 	for (int i = 0; i < grid_width; i++) {
-		struct line line = DIAG_LINE(MAX(0, i - grid_height),MIN(i, grid_height),i,0);
+		struct line line = DIAG_LINE(MAX(0, i - GRID_MHEIGHT),MIN(i, GRID_MHEIGHT),i,0);
                 addline(&line);
         }
 	
 	for (int i = 0; i < grid_height + 1; i++) {
-	        struct line line = DIAG_LINE(MAX(0,(i - (grid_height - grid_width))),MIN(i + grid_width, grid_height),grid_width, i);
+	        struct line line = DIAG_LINE(MAX(0,(i - (GRID_MHEIGHT - GRID_MWIDTH))),MIN(i + GRID_MWIDTH, GRID_MHEIGHT),GRID_MWIDTH, i);
                 addline(&line);
         }
 
 	for (int i = 0; i < grid_width; i++) {
-		struct line line = DIAG_LINE(MIN(grid_width, grid_width - (i - grid_height)),MIN(i, grid_height),grid_width - i, 0);
+		struct line line = DIAG_LINE(MIN(GRID_MWIDTH, GRID_MWIDTH - (i - GRID_MHEIGHT)),MIN(i, GRID_MWIDTH),GRID_MWIDTH - i, 0);
                 addline(&line);
         }
 	
 	for (int i = 0; i < grid_height + 1; i++) {
-		struct line line = DIAG_LINE(MIN(grid_width,(grid_height - i)),MIN(i + grid_width, grid_height),0, i);
+		struct line line = DIAG_LINE(MIN(GRID_MWIDTH,(GRID_MHEIGHT - i)),MIN(i + GRID_MWIDTH, GRID_MHEIGHT),0, i);
 		addline(&line);
 	}
 }
@@ -219,12 +219,12 @@ void drawgrid()
 {
 	drawdiag();
 	
-	for (int i = 0; i < grid_height + 1; i++) {
-		struct line line = GRID_LINE(0,i,grid_width,i);
+	for (int i = 0; i < grid_height; i++) {
+		struct line line = GRID_LINE(0,i,GRID_MWIDTH,i);
                 addline(&line);
         }
-        for (int i = 0; i < grid_width + 1; i++) {
-		struct line line = GRID_LINE(i,0,i,grid_height);
+        for (int i = 0; i < grid_width; i++) {
+		struct line line = GRID_LINE(i,0,i,GRID_MHEIGHT);
                 addline(&line);
         }
 		
@@ -233,20 +233,20 @@ void drawgrid()
 void deldiag()
 {
 	for (int i = 0; i < grid_width; i++) {
-		struct line line = DIAG_LINE(MAX(0, i - grid_height),MIN(i, grid_height),i,0);
+		struct line line = DIAG_LINE(MAX(0, i - GRID_MHEIGHT),MIN(i, GRID_MHEIGHT),i,0);
                 delline(&line);
         }
 	for (int i = 0; i < grid_height + 1; i++) {
-	        struct line line = DIAG_LINE(MAX(0,(i - (grid_height - grid_width))),MIN(i + grid_width, grid_height),grid_width, i);
+	        struct line line = DIAG_LINE(MAX(0,(i - (GRID_MHEIGHT - GRID_MWIDTH))),MIN(i + GRID_MWIDTH, GRID_MHEIGHT),GRID_MWIDTH, i);
                 delline(&line);
         }
 	for (int i = 0; i < grid_width; i++) {
-		struct line line = DIAG_LINE(MIN(grid_width, grid_width - (i - grid_height)),MIN(i, grid_height),grid_width - i, 0);
+	        struct line line = DIAG_LINE(MIN(GRID_MWIDTH, GRID_MWIDTH - (i - GRID_MHEIGHT)),MIN(i, GRID_MWIDTH),GRID_MWIDTH - i, 0);
                 delline(&line);
         }
 	
 	for (int i = 0; i < grid_height + 1; i++) {
-		struct line line = DIAG_LINE(MIN(grid_width,(grid_height - i)),MIN(i + grid_width, grid_height),0, i);
+		struct line line = DIAG_LINE(MIN(GRID_MWIDTH,(GRID_MHEIGHT - i)),MIN(i + GRID_MWIDTH, GRID_MHEIGHT),0, i);
 		delline(&line);
 	}
 }
@@ -255,11 +255,11 @@ void delgrid()
 {
 	deldiag();
 	
-	for (int i = 0; i < grid_height + 1; i++) {
+	for (int i = 0; i < grid_height; i++) {
 		struct line line = GRID_LINE(0,i,grid_width,i);
                 delline(&line);
         }
-        for (int i = 0; i < grid_width + 1; i++) {
+        for (int i = 0; i < grid_width; i++) {
 		struct line line = GRID_LINE(i,0,i,grid_height);
                 delline(&line);
         }
