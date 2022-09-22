@@ -20,16 +20,16 @@ extern int grid_height;
 
 
 
-#define GRID_MWIDTH ( grid_width )
+#define GRID_MWIDTH ( grid_width + 1)
 
-#define GRID_MHEIGHT ( grid_height )
+#define GRID_MHEIGHT ( grid_height + 1)
 
 #define WIN_BORDER 5
 
 #define PX_PER_SPACE 10 
 
-#define WINHEIGHT ((2 * (WIN_BORDER)) + (PX_PER_SPACE) * GRID_MHEIGHT)
-#define WINWIDTH ((2 * (WIN_BORDER)) + (PX_PER_SPACE) * GRID_MWIDTH)
+#define WINHEIGHT ((2 * (WIN_BORDER)) + (PX_PER_SPACE) * grid_height)
+#define WINWIDTH ((2 * (WIN_BORDER)) + (PX_PER_SPACE) * grid_width)
 
 #define CIRCLE_RAD 4
 
