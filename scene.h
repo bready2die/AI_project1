@@ -20,9 +20,9 @@ extern int grid_height;
 
 
 
-#define GRID_MWIDTH ( grid_width - 1)
+#define GRID_MWIDTH ( grid_width )
 
-#define GRID_MHEIGHT ( grid_height - 1)
+#define GRID_MHEIGHT ( grid_height )
 
 #define WIN_BORDER 5
 

@@ -10,9 +10,9 @@
 
 //both grid_width and grid_height should be moved into graph.c when it is ready for testing
 
-int grid_width=DEF_GRID_WIDTH;
+int grid_width = DEF_GRID_WIDTH;
 
-int grid_height=DEF_GRID_HEIGHT;
+int grid_height = DEF_GRID_HEIGHT;
 
 struct scene_context main_scene;
 
