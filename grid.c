@@ -282,28 +282,32 @@ void clear_vertices ()
 	//TODO
 }
 
+int search_closed_list(struct coords coords, struct vertex** output)
+{
+	int test = 1;
+	struct list_head* i;
+	list_for_each(i, &closed_list)
+	{
+		struct vertex* v = list_entry(i, struct vertex, list);
+		if (COORDS_CMP((*output)->position, coords))
+		{
+			test = 0;
+			*output = v;
+			break;
+		}
+	}
+	return test;
+}
+
+
 int search_vertices(struct coords coords, struct vertex** output)
 {
 	int test = heap_search(&fringe, coords, output);
 	if (test)
 	{
-		struct list_head* i;
-		list_for_each(i, &closed_list)
-		{
-			struct vertex* v = list_entry(i, struct vertex, list);
-			if (COORDS_CMP((*output)->position, coords))
-			{
-				test = 0;
-				*output = v;
-				break;
-			}
-		}
+		test = search_closed_list(coords, output);
 	}
-	if (!test)
-	{
-		return 1;
-	}
-	return 0;
+	return test;
 }
 
 int get_hval(int x, int y, double* ret)
@@ -332,7 +336,7 @@ int get_fval(int x, int y, double* ret)
         return 0;
 }
 
-int run_algo(char* type)
+int run_algo(char* type, double* total_cost)
 {
 	
 	algo_ran = type[0];

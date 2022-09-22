@@ -53,13 +53,15 @@ int init_vertex(int x, int y, struct vertex* buffer);//NOTE: the .h value must b
 
 void clear_vertices(); //removes all vertex and path information, effectively undos search
 
+int search_closed_list(struct coords coords, struct vertex** output);
+
 int search_vertices(struct coords coords, struct vertex** output);
 
 int get_hval(int x, int y, double* ret);
 
 int get_fval(int x, int y, double* ret);
 
-int run_algo(char* type);
+int run_algo(char* type, double* total_cost);
 
 int make_path(struct vertex* goal);
 //run this one on the goal to create a path ending at the goal
