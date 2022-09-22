@@ -59,6 +59,8 @@ int get_hval(int x, int y, double* ret);
 
 int get_fval(int x, int y, double* ret);
 
+int run_algo(char* type);
+
 int make_path(struct vertex* goal);
 //run this one on the goal to create a path ending at the goal
 

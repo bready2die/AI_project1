@@ -34,13 +34,14 @@ int new_grid(int _width, int _height)
 	{
 		return 1;
 	}
+	
 	width = _width;
 	height = _height;
 	goal_placed = 0;
 	start_placed = 0;
 	algo_ran = 0;
 	blocks = malloc(sizeof(char)*width*height);
-	memset(blocks, 0, width*height);
+	memset(blocks, 0, sizeof(char)*width*height);
 	LIST_HEAD(closed_list);
 	heap_init(&fringe);
 	
@@ -58,7 +59,7 @@ int reset_grid()
 
 int put_start(int x, int y)
 {
-	if (x < 1 || x > width || y < 1 || y > height)
+	if (x < 1 || x > width+1 || y < 1 || y > height+1)
 	{
 		return 1;
 	}
@@ -66,11 +67,11 @@ int put_start(int x, int y)
 	start.y = y;
 	
 	//graphics
-	struct circle circle = START_CIRCLE( (int)(x-1), (int)(y-1), CIRCLE_RAD);
-	if (goal_placed)
+	struct circle circle = START_CIRCLE( (int)(x), (int)(y), CIRCLE_RAD);
+	if (start_placed)
 		delcircle(&start_circle);
 	memcpy(&start_circle, &circle, sizeof(struct circle));
-	addcircle(&circle);
+	addcircle(&start_circle);
 	redraw_scene();
 	
 	start_placed = 1;
@@ -90,7 +91,7 @@ int get_start(int* x, int* y){
 
 int put_goal(int x, int y)
 {
-        if (x < 1 || x > width || y < 1 || y > height)
+        if (x < 1 || x > width+1 || y < 1 || y > height+1)
         {
                 return 1;
         }
@@ -98,7 +99,7 @@ int put_goal(int x, int y)
         goal.y = y;
         
         //graphics
-	struct circle circle = GOAL_CIRCLE( (int)(x-1), (int)(y-1), CIRCLE_RAD);
+	struct circle circle = GOAL_CIRCLE( (int)(x), (int)(y), CIRCLE_RAD);
 	if (goal_placed)
 		delcircle(&goal_circle);
 	memcpy(&goal_circle, &circle, sizeof(struct circle));
@@ -122,16 +123,16 @@ int get_goal(int* x, int* y){
 
 int set_tile(int x, int y, char block)
 {
-	if (x < 1 || x >= width || y < 1 || y >= height)
+	if (x < 1 || x > width || y < 1 || y > height)
         {
         	return 1;
         }
         if (blocks[(x-1)*height+y-1] == block)
         {
-        	return 2;
+        	return 0;
         }
         blocks[(x-1)*height+y-1] = block;
-
+        
         //graphics
         struct rect rect = BLOCK_RECT(x, y);
         if (block)
@@ -143,6 +144,7 @@ int set_tile(int x, int y, char block)
         	//remove block
         	delrect(&rect);
         }
+        redraw_scene();
 
         return 0;
 }
@@ -173,20 +175,19 @@ int load_file(char* filename)
 	fscanf(file, "%d %d ", &(goalbuf.x), &(goalbuf.y));
 	fscanf(file, "%d %d ", &(sizebuf.x), &(sizebuf.y));
 	
-	new_grid(sizebuf.x, sizebuf.y);
-	put_start(startbuf.x, startbuf.y);
+	new_grid(sizebuf.x, sizebuf.y); printf("check 2a\n");
+	put_start(startbuf.x, startbuf.y); printf("check 2b\n");
 	put_goal(goalbuf.x, goalbuf.y);
 
-	int buf1, buf2;
-	char buf3;
+	int buf1, buf2, buf3;
 	while (fscanf(file, "%d %d %d ", &buf1, &buf2, (int*) &buf3) == 3)
 	{
 		if (buf1 > 0 && buf1 <= width && buf2 > 0 && buf2 <= height)
 		{
-			set_tile(buf1, buf2, buf3);
+			set_tile(buf1, buf2, (char)buf3);
 		}
 	}
-
+	
 	if (fclose(file))
 	init = 1;
 	return 0;
@@ -265,6 +266,7 @@ void clear_vertices ()
 	struct list_head* buf;
 	struct vertex* v;
 
+	
 	list_for_each_safe(i, buf, &closed_list)
 	{
 		v = list_entry(i, struct vertex, list);
@@ -328,6 +330,14 @@ int get_fval(int x, int y, double* ret)
 
         *ret = target->h + target->g;
         return 0;
+}
+
+int run_algo(char* type)
+{
+	
+	algo_ran = type[0];
+	//TODO
+	return 0;
 }
 
 int make_path(struct vertex* goal)

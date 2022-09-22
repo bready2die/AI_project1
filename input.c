@@ -7,7 +7,7 @@
 #include <limits.h>
 #include "input.h"
 #include "scene.h"
-//#define TEST_GRID 1
+#define TEST_GRID 1//
 #ifdef TEST_GRID
 #include "grid.h"
 #endif

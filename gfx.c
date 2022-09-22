@@ -50,6 +50,7 @@ XSizeHints sizehints = {
 
 void gfx_open( int width, int height, const char *title )
 {
+	XInitThreads();//forced added; apparently needed for multithread support
 
 	gfx_display = XOpenDisplay(0);
 	if(!gfx_display) {
