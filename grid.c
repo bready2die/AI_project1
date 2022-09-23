@@ -6,6 +6,7 @@
 #include "grid.h"
 #include "heap.h"
 #include "scene.h"
+#include "search.h"
 
 
 static int width, height;
@@ -42,8 +43,12 @@ int new_grid(int _width, int _height)
 	algo_ran = 0;
 	blocks = malloc(sizeof(char)*width*height);
 	memset(blocks, 0, sizeof(char)*width*height);
-	LIST_HEAD(closed_list);
-	heap_init(&fringe);
+	
+	if (!init)
+	{
+		INIT_LIST_HEAD(&closed_list);
+		heap_init(&fringe);
+	}
 	
 	resize_window(_width, _height);
 	redraw_scene();
@@ -62,6 +67,10 @@ int put_start(int x, int y)
 	if (x < 1 || x > width+1 || y < 1 || y > height+1)
 	{
 		return 1;
+	}
+	if (algo_ran)
+	{
+		clear_vertices();
 	}
 	start.x = x;
 	start.y = y;
@@ -95,6 +104,10 @@ int put_goal(int x, int y)
         {
                 return 1;
         }
+        if (algo_ran)
+	{
+		clear_vertices();
+	}
         goal.x = x;
         goal.y = y;
         
@@ -127,6 +140,10 @@ int set_tile(int x, int y, char block)
         {
         	return 1;
         }
+        if (algo_ran)
+	{
+		clear_vertices();
+	}
         if (blocks[(x-1)*height+y-1] == block)
         {
         	return 0;
@@ -175,8 +192,8 @@ int load_file(char* filename)
 	fscanf(file, "%d %d ", &(goalbuf.x), &(goalbuf.y));
 	fscanf(file, "%d %d ", &(sizebuf.x), &(sizebuf.y));
 	
-	new_grid(sizebuf.x, sizebuf.y); printf("check 2a\n");
-	put_start(startbuf.x, startbuf.y); printf("check 2b\n");
+	new_grid(sizebuf.x, sizebuf.y);
+	put_start(startbuf.x, startbuf.y);
 	put_goal(goalbuf.x, goalbuf.y);
 
 	int buf1, buf2, buf3;
@@ -279,7 +296,7 @@ void clear_vertices ()
 	}
 	
 	algo_ran = 0;
-	//TODO
+	heap_destroy(&fringe);
 }
 
 int search_closed_list(struct coords coords, struct vertex** output)
@@ -289,7 +306,7 @@ int search_closed_list(struct coords coords, struct vertex** output)
 	list_for_each(i, &closed_list)
 	{
 		struct vertex* v = list_entry(i, struct vertex, list);
-		if (COORDS_CMP((*output)->position, coords))
+		if (COORDS_CMP(v->position, coords))
 		{
 			test = 0;
 			*output = v;
@@ -338,10 +355,13 @@ int get_fval(int x, int y, double* ret)
 
 int run_algo(char* type, double* total_cost)
 {
-	
+	if (algo_ran)
+	{
+		clear_vertices();
+	}
 	algo_ran = type[0];
-	//TODO
-	return 0;
+	return search(total_cost, algo_ran);
+	
 }
 
 int make_path(struct vertex* goal)
@@ -380,7 +400,6 @@ static void close_grid()
 		delcircle(&start_circle);
 	
 	clear_vertices();
-	heap_destroy(&fringe);
 }
 
 

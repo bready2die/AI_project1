@@ -7,13 +7,13 @@
 #include <limits.h>
 #include "input.h"
 #include "scene.h"
-//#define TEST_GRID 1//
+#define TEST_GRID 1//
 #ifdef TEST_GRID
 #include "grid.h"
 #endif
 
 
-#define TEST_GRAPHICS 1
+//#define TEST_GRAPHICS 1
 
 static struct icli_command *goal;
 static struct icli_command *start;
@@ -51,7 +51,7 @@ static enum icli_ret goal_cmd(char **argv, int argc, void *context)
 	
 	errno = 0;
 	x = strtol(argv[0], &endptr, 10);
-	if(check_number(x,grid_width) || *endptr != '\0') {
+	if(check_number(x,grid_width+1) || *endptr != '\0') {
 		icli_err_printf("Invalid or out of range x operand\n");
 		return ICLI_ERR;
 	}
@@ -59,7 +59,7 @@ static enum icli_ret goal_cmd(char **argv, int argc, void *context)
 	endptr = NULL;
 	errno = 0;
 	y = strtol(argv[1], &endptr, 10);
-	if(check_number(y, grid_height) || *endptr != '\0') {
+	if(check_number(y, grid_height+1) || *endptr != '\0') {
 		icli_err_printf("Invalid or out of range y operand\n");
 		return ICLI_ERR;
 	}
@@ -113,7 +113,7 @@ static enum icli_ret start_cmd(char **argv, int argc, void *context)
 	
 	errno = 0;
 	x = strtol(argv[0], &endptr, 10);
-	if (check_number(x, grid_width) || *endptr != '\0') {
+	if (check_number(x, grid_width+1) || *endptr != '\0') {
 		icli_err_printf("Invalid or out of range x operand\n");
 		return ICLI_ERR;
 	}
@@ -121,7 +121,7 @@ static enum icli_ret start_cmd(char **argv, int argc, void *context)
 	endptr = NULL;
 	errno = 0;
 	y = strtol(argv[1], &endptr, 10);
-	if (check_number(y, grid_height) || *endptr != '\0') {
+	if (check_number(y, grid_height+1) || *endptr != '\0') {
 		icli_err_printf("Invalid or out of range y operand\n");
 		return ICLI_ERR;
 	}
@@ -350,7 +350,7 @@ static struct icli_command_params unblock_params = {
 static enum icli_ret load_cmd(char **argv, int argc, void *context)
 {
 #ifdef TEST_GRID
-	if(load_file(argv[1])) {
+	if(load_file(argv[0])) {
 		icli_err_printf("error opening file\n");
 		return ICLI_ERR;
 	}
@@ -369,17 +369,19 @@ static struct icli_command_params load_params = {
 	.short_name = "load",
 	.help = "load a test file onto the board",
 	.command = load_cmd,
-	.argc = 2,
+	.argc = 1,
 	.argv = load_args,
 };
 
 static enum icli_ret run_cmd(char **argv, int argc, void *context)
 {
 #ifdef TEST_GRID
-	if(run_algo(argv[0])) {
+	double output;
+	if(run_algo(argv[0], &output)) {
 		icli_err_printf("error blocking tile\n");
 		return ICLI_ERR;
 	}
+	//print output, or smth
 #else		
 	icli_printf("command not yet implemented\n");
 #endif
@@ -387,8 +389,8 @@ static enum icli_ret run_cmd(char **argv, int argc, void *context)
 }
 
 static struct icli_arg_val run_arg_vals[] = {
-	{.val = "astar", .help = "run the A\* algorithm"},
-	{.val = "theta", .help = "run the theta\* algorithm"},
+	{.val = "astar", .help = "run the A* algorithm"},
+	{.val = "theta", .help = "run the theta* algorithm"},
 	{.val = NULL},
 };
 
