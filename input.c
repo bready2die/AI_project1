@@ -418,7 +418,7 @@ static enum icli_ret getvals_cmd(char **argv, int argc, void *context)
 	double fval;
 	errno = 0;
 	x = strtol(argv[0], &endptr, 10);
-	if(check_number(x,grid_width) || *endptr != '\0') {
+	if(check_number(x,grid_width+1) || *endptr != '\0') {
 		icli_err_printf("Invalid or out of range x operand\n");
 		return ICLI_ERR;
 	}
@@ -426,7 +426,7 @@ static enum icli_ret getvals_cmd(char **argv, int argc, void *context)
 	endptr = NULL;
 	errno = 0;
 	y = strtol(argv[1], &endptr, 10);
-	if(check_number(y, grid_height) || *endptr != '\0') {
+	if(check_number(y, grid_height+1) || *endptr != '\0') {
 		icli_err_printf("Invalid or out of range y operand\n");
 		return ICLI_ERR;
 	}
