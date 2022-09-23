@@ -381,6 +381,7 @@ static enum icli_ret run_cmd(char **argv, int argc, void *context)
 		icli_err_printf("error blocking tile\n");
 		return ICLI_ERR;
 	}
+	icli_printf("total distance: %lf\n", output);
 	//print output, or smth
 #else		
 	icli_printf("command not yet implemented\n");

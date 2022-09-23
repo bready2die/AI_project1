@@ -165,7 +165,7 @@ static int update_vertex(struct vertex* s, struct vertex* s2, char alg)
 			s2->parent = s->parent;
 			if (!heap_search(&fringe, s2->position, NULL))
 			{
-				heap_remove(&fringe, s2->position, NULL);
+				heap_remove(&fringe, s2->position, &s2);
 			}
 			heap_insert(&fringe, s2, s2->g+s2->h);
 		}
@@ -176,7 +176,7 @@ static int update_vertex(struct vertex* s, struct vertex* s2, char alg)
 		s2->parent = s;
 		if (!heap_search(&fringe, s2->position, NULL))
 		{
-			heap_remove(&fringe, s2->position, NULL);
+			heap_remove(&fringe, s2->position, &s2);
 		}
 		heap_insert(&fringe, s2, s2->g+s2->h);
 	}

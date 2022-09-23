@@ -92,8 +92,12 @@ int heap_pop(struct heap* h, struct vertex** output){
 	h->size -= 1;
 
 	downheap(h, 0);
-
-	*output = out;
+	if (output)
+	{
+		*output = out;
+	} else {
+		free(out);
+	}
 	return 0;
 }
 
@@ -123,6 +127,8 @@ int heap_remove(struct heap* h, struct coords position, struct vertex** output){
 			if (output)
 			{
 				*output = h->array[h->size-1]->element;
+			} else {
+				free(h->array[h->size-1]->element);
 			}
 			free(h->array[h->size-1]);
 			h->size -= 1;

@@ -16,7 +16,8 @@ static char init = 0;
 
 static char* blocks; //grid noting blocked tiles.
 
-struct list_head closed_list;
+//struct list_head closed_list;
+LIST_HEAD(closed_list);
 struct heap fringe;
 
 static struct circle start_circle;
@@ -46,7 +47,6 @@ int new_grid(int _width, int _height)
 	
 	if (!init)
 	{
-		INIT_LIST_HEAD(&closed_list);
 		heap_init(&fringe);
 	}
 	
@@ -68,10 +68,8 @@ int put_start(int x, int y)
 	{
 		return 1;
 	}
-	if (algo_ran)
-	{
-		clear_vertices();
-	}
+	clear_vertices();
+
 	start.x = x;
 	start.y = y;
 	
@@ -104,10 +102,7 @@ int put_goal(int x, int y)
         {
                 return 1;
         }
-        if (algo_ran)
-	{
-		clear_vertices();
-	}
+	clear_vertices();
         goal.x = x;
         goal.y = y;
         
@@ -133,6 +128,8 @@ int get_goal(int* x, int* y){
 	*y = goal.y;
 	return 0;
 }
+
+static char redraw_hold = 0;
 
 int set_tile(int x, int y, char block)
 {
@@ -161,7 +158,8 @@ int set_tile(int x, int y, char block)
         	//remove block
         	delrect(&rect);
         }
-        redraw_scene();
+        if (!redraw_hold)
+        	redraw_scene();
 
         return 0;
 }
@@ -197,6 +195,7 @@ int load_file(char* filename)
 	put_goal(goalbuf.x, goalbuf.y);
 
 	int buf1, buf2, buf3;
+	redraw_hold = 1;
 	while (fscanf(file, "%d %d %d ", &buf1, &buf2, (int*) &buf3) == 3)
 	{
 		if (buf1 > 0 && buf1 <= width && buf2 > 0 && buf2 <= height)
@@ -204,6 +203,8 @@ int load_file(char* filename)
 			set_tile(buf1, buf2, (char)buf3);
 		}
 	}
+	redraw_hold = 0;
+	redraw_scene();
 	
 	if (fclose(file))
 	init = 1;
@@ -283,6 +284,9 @@ int init_vertex(int x, int y, struct vertex* buffer)
 
 void clear_vertices ()
 {
+	if (!algo_ran)
+        	return;
+	
 	struct list_head* i;
 	struct list_head* buf;
 	struct vertex* v;
@@ -305,6 +309,8 @@ void clear_vertices ()
 
 int search_closed_list(struct coords coords, struct vertex** output)
 {
+	if (!algo_ran)
+        	return 1;
 	int test = 1;
 	struct list_head* i;
 	list_for_each(i, &closed_list)
@@ -333,6 +339,8 @@ int search_vertices(struct coords coords, struct vertex** output)
 
 int get_hval(int x, int y, double* ret)
 {
+	if (!algo_ran)
+        	return 1;
 	struct vertex* target;
 	int test = search_vertices((struct coords){.x=x,.y=y}, &target);
 	if (test == 1)
@@ -346,6 +354,8 @@ int get_hval(int x, int y, double* ret)
 
 int get_fval(int x, int y, double* ret)
 {
+        if (!algo_ran)
+        	return 1;
         struct vertex* target;
         int test = search_vertices((struct coords){.x=x,.y=y}, &target);
 	if (test == 1)
@@ -359,10 +369,8 @@ int get_fval(int x, int y, double* ret)
 
 int run_algo(char* type, double* total_cost)
 {
-	if (algo_ran)
-	{
-		clear_vertices();
-	}
+
+	clear_vertices();
 	algo_ran = type[0];
 	return search(total_cost, algo_ran);
 	
@@ -393,17 +401,18 @@ int make_path(struct vertex* goal)
 
 static void close_grid()
 {
+	redraw_hold = 1;
 	for (int i = 0; i < width*height; i++)
 	{
 		set_tile(i/height+1, i%height+1, 0);
 	}
+	redraw_hold = 0;
 	free(blocks);
 	if (goal_placed)
 		delcircle(&goal_circle);
 	if (start_placed)
 		delcircle(&start_circle);
-	
-	clear_vertices();
+	//clear_vertices();
 }
 
 
