@@ -221,8 +221,8 @@ int succ(struct coords pos, struct coords* buffer) //returns successor count
 	//checks diagonally adjacent tiles
 	for (int i = 0; i < 4; i++)
 	{
-		int cell_x = pos.x + i/2 - 1;
-		int cell_y = pos.y + i%2 - 1;
+		int cell_x = pos.x + i/2 - 2;
+		int cell_y = pos.y + i%2 - 2;
 		//checks if tile is empty
 		if (cell_x >= 0 && cell_y >= 0 && cell_x < width && cell_y < height 
 			&& blocks[cell_x*(height) + cell_y] == 0)
@@ -262,6 +262,10 @@ int succ(struct coords pos, struct coords* buffer) //returns successor count
                         count++;
                 }
 	}
+	/*for (int i = 0; i < count; i++){
+		printf("(%d,%d) ", buffer[i].x, buffer[i].y);
+	}
+	printf("\n");*/
 	return count;
 }
 
