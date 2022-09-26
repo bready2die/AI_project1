@@ -168,6 +168,10 @@ static struct icli_command_params start_params = {
 static enum icli_ret clear_cmd(char **argv, int argc, void *context)
 {
 	icli_printf("clearing board...\n");
+	if(reset_grid()) {
+		icli_err_printf("error resizing grid\n");
+		return ICLI_ERR;
+	}
 	
 	return ICLI_OK;
 }

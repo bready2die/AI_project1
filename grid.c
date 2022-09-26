@@ -387,6 +387,8 @@ int make_path(struct vertex* goal)
 		}
 		struct line line = PATH_LINE(ptr->position.x, ptr->position.y, 
 					ptr->parent->position.x, ptr->parent->position.y);
+		if (ptr->has_line)
+			delline(&(ptr->path_line));
 		memcpy(&(ptr->path_line), &line, sizeof(struct line));
 		addline(&(ptr->path_line));
 
@@ -412,7 +414,7 @@ static void close_grid()
 		delcircle(&goal_circle);
 	if (start_placed)
 		delcircle(&start_circle);
-	//clear_vertices();
+	clear_vertices();
 }
 
 
