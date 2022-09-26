@@ -169,7 +169,7 @@ static enum icli_ret clear_cmd(char **argv, int argc, void *context)
 {
 	icli_printf("clearing board...\n");
 	if(reset_grid()) {
-		icli_err_printf("error resizing grid\n");
+		icli_err_printf("error clearing grid\n");
 		return ICLI_ERR;
 	}
 	
