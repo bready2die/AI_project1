@@ -166,7 +166,7 @@ int set_tile(int x, int y, char block)
 
 int get_tile(int x, int y, char* block)
 {
-	if (x < 1 || x >= width || y < 1 || y >= height)
+	if (x < 1 || x > width || y < 1 || y > height)
 	{
 		return 1;
 	}
