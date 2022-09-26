@@ -382,7 +382,7 @@ static enum icli_ret run_cmd(char **argv, int argc, void *context)
 #ifdef TEST_GRID
 	double output;
 	if(run_algo(argv[0], &output)) {
-		icli_err_printf("error blocking tile\n");
+		icli_err_printf("error no path found\n");
 		return ICLI_ERR;
 	}
 	icli_printf("total distance: %lf\n", output);
