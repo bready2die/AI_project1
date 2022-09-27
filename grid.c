@@ -48,9 +48,9 @@ int new_grid(int _width, int _height)
 	if (!init)
 	{
 		heap_init(&fringe);
+	} else {
+		resize_window(_width, _height);
 	}
-	
-	resize_window(_width, _height);
 	redraw_scene();
 
 	init = 1;

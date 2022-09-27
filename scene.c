@@ -3,6 +3,7 @@
 #include "gfx.h"
 #include "window.h"
 #include "scene.h"
+#include "grid.h"
 
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
 
@@ -330,6 +331,7 @@ int start_scene()
         //drawgrid();
         gfx_flush();
 	
+	new_grid(grid_width, grid_height);
 	drawgrid();
 
 	return 0;
