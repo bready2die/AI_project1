@@ -1,7 +1,7 @@
 CC=gcc
-CFLAGS=-Wall -g 
+CFLAGS=-Wall
 
-example: icli.o main.o gfx.o input.o window.o scene.o grid.o heap.o search.o
+all: icli.o main.o gfx.o input.o window.o scene.o grid.o heap.o search.o
 	$(CC) $(CFLAGS) ./main.o ./window.o ./icli.o ./gfx.o ./grid.o ./heap.o ./input.o ./scene.o ./search.o -o path_finder -ledit -lX11 -pthread -lm 
 
 heap.o:
