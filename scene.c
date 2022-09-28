@@ -218,7 +218,7 @@ void drawdiag()
 }
 void drawgrid()
 {
-	drawdiag();
+	//drawdiag();
 	
 	for (int i = 0; i < grid_height + 1; i++) {
 		struct line line = GRID_LINE(0,i,grid_width,i);
@@ -254,7 +254,7 @@ void deldiag()
 
 void delgrid()
 {
-	deldiag();
+	//deldiag();
 	
 	for (int i = 0; i < grid_height + 1; i++) {
 		struct line line = GRID_LINE(0,i,grid_width,i);
