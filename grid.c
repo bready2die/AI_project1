@@ -286,7 +286,7 @@ int init_vertex(int x, int y, struct vertex* buffer)
 
 static double _seed(struct coords pos){//Number should be practically random in terms of ordering, relative to neighboring coords
 	int number = pos.x * height + pos.y;
-	return tan(number);
+	return tan(number*number);
 }
 
 static int _add_to_tree(struct vertex* v, double val, struct bstnode** ptr)
@@ -420,11 +420,30 @@ int get_hval(int x, int y, double* ret)
 	int test = search_vertices((struct coords){.x=x,.y=y}, &target);
 	if (test == 1)
 	{
+		if (x > 0 && x <= width && y > 0 && y <= height && algo_ran != 0){
+			*ret = h((struct coords){.x=x, .y=y}, algo_ran);
+			return 0;
+		}
 		return 1;
 	}
 
 	*ret = target->h;
 	return 0;
+}
+
+int get_gval(int x, int y, double* ret)
+{
+        if (!algo_ran)
+        	return 1;
+        struct vertex* target;
+        int test = search_vertices((struct coords){.x=x,.y=y}, &target);
+	if (test == 1)
+	{
+		return 1;
+	}
+
+        *ret = target->g;
+        return 0;
 }
 
 int get_fval(int x, int y, double* ret)

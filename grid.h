@@ -71,6 +71,8 @@ int search_vertices(struct coords coords, struct vertex** output);
 
 int get_hval(int x, int y, double* ret);
 
+int get_gval(int x, int y, double* ret);
+
 int get_fval(int x, int y, double* ret);
 
 int run_algo(char* type, double* total_cost);

@@ -5,7 +5,7 @@
 static struct coords startpos;
 static struct coords goalpos;
 
-static double h(struct coords position, char alg)
+double h(struct coords position, char alg)
 {
 	if (alg == 'a')
 	{

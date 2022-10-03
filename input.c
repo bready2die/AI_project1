@@ -420,6 +420,7 @@ static enum icli_ret getvals_cmd(char **argv, int argc, void *context)
 	long y = 0;
 	char *endptr;
 	double hval;
+	double gval;
 	double fval;
 	errno = 0;
 	x = strtol(argv[0], &endptr, 10);
@@ -440,11 +441,15 @@ static enum icli_ret getvals_cmd(char **argv, int argc, void *context)
 		icli_err_printf("error getting hval\n");
 		return ICLI_ERR;
 	}
+	if(get_gval(x,y,&gval)) {
+		icli_err_printf("error getting fval\n");
+		return ICLI_ERR;
+	}
 	if(get_fval(x,y,&fval)) {
 		icli_err_printf("error getting fval\n");
 		return ICLI_ERR;
 	}
-	icli_printf("(%ld,%ld)\n\thval:%f.10\n\tfval:%f.10\n",x,y,hval,fval);
+	icli_printf("(%ld,%ld)\n\thval:%f.10\n\tgval:%f.10\n\tfval:%f.10\n",x,y,hval,gval,fval);
 #else		
 	icli_printf("command not yet implemented\n");
 #endif
