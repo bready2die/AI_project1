@@ -5,7 +5,9 @@
 #include "scene.h"
 #include "heap.h"
 
-extern struct list_head closed_list;
+struct bstnode;
+
+extern struct bstnode* closed_list;
 extern struct heap fringe;
 
 struct coords
@@ -22,11 +24,19 @@ struct vertex // this setup may change, maybe
         double g; //distance from start, following path
         double h; //heuristic (estimated distance from vertex to goal)
         struct vertex* parent;
-        struct list_head list;
+        //struct list_head list;
         
         //store lines for scene here? (this to parent, most likely)
         char has_line;
         struct line path_line;
+};
+
+struct bstnode 
+{
+	struct vertex* vertex;
+	double val;
+	struct bstnode* left;
+	struct bstnode* right;
 };
 
 int new_grid(int _width, int _height); // makes a new grid, replacing any old one
@@ -50,6 +60,8 @@ int load_file(char* filename);
 int succ(struct coords pos, struct coords* buffer); //returns successor count. All output coords are stored to buffer.
 
 int init_vertex(int x, int y, struct vertex* buffer);//NOTE: the .h value must be explicitly initialized afterwards, as it is dependent on the algorithm.
+
+int add_to_closed_list (struct vertex* vertex);
 
 void clear_vertices(); //removes all vertex and path information, effectively undos search
 

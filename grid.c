@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <limits.h>
+#include <math.h>
 #include "linux_list.h"
 #include "grid.h"
 #include "heap.h"
@@ -17,7 +18,7 @@ static char init = 0;
 static char* blocks; //grid noting blocked tiles.
 
 //struct list_head closed_list;
-LIST_HEAD(closed_list);
+struct bstnode* closed_list;
 struct heap fringe;
 
 static struct circle start_circle;
@@ -47,6 +48,7 @@ int new_grid(int _width, int _height)
 	
 	if (!init)
 	{
+		closed_list = NULL;
 		heap_init(&fringe);
 	} else {
 		resize_window(_width, _height);
@@ -282,11 +284,62 @@ int init_vertex(int x, int y, struct vertex* buffer)
 	return 0;
 }
 
+static double _seed(struct coords pos){//Number should be practically random in terms of ordering, relative to neighboring coords
+	int number = pos.x * height + pos.y;
+	return tan(number);
+}
+
+static int _add_to_tree(struct vertex* v, double val, struct bstnode** ptr)
+{
+	if (*ptr == NULL)
+	{
+		struct bstnode* n = malloc(sizeof(struct bstnode));
+		n->vertex = v;
+		n->val = _seed(v->position);
+		n->left = NULL;
+		n->right = NULL;
+		*ptr = n;
+		return 0;
+	}
+	if (COORDS_CMP(v->position, (*ptr)->vertex->position))
+	{
+		return 1;
+	}
+	if (val < (*ptr)->val)
+	{
+		return _add_to_tree(v, val, &((*ptr)->left));
+	}
+	return _add_to_tree(v, val, &((*ptr)->right));
+}
+
+int add_to_closed_list (struct vertex* vertex)
+{
+	return _add_to_tree(vertex, _seed(vertex->position), &closed_list);
+}
+
+static int del_closed_list(struct bstnode* root)
+{
+	if (root == NULL)
+		return 1;
+
+	if (root->vertex->has_line)
+		delline(&(root->vertex->path_line));
+		
+	free(root->vertex);
+	del_closed_list(root->left);
+	del_closed_list(root->right);
+	free(root);
+	return 0;
+}
+
 void clear_vertices ()
 {
 	if (!algo_ran)
         	return;
-	
+        	
+        del_closed_list(closed_list);
+        closed_list = NULL;
+	/*
 	struct list_head* i;
 	struct list_head* buf;
 	struct vertex* v;
@@ -302,16 +355,37 @@ void clear_vertices ()
 		
 		free(v);
 	}
-	
+	*/
 	algo_ran = 0;
 	heap_destroy(&fringe);
 }
 
-int search_closed_list(struct coords coords, struct vertex** output)
+static int _search_bst(struct coords coords, double val, struct vertex** output, struct bstnode* root)
+{
+	if (root == NULL)
+	{
+		return 1;
+	}
+	if (COORDS_CMP(coords, root->vertex->position))
+	{
+		*output = root->vertex;
+		return 0;
+	}
+	if (val < root->val)
+	{
+		return _search_bst(coords, val, output, root->left);
+	}
+	return _search_bst(coords, val, output, root->right);
+}
+
+int search_closed_list(struct coords coords, struct vertex** output)//TODO
 {
 	if (!algo_ran)
         	return 1;
-	int test = 1;
+	//int test = 1;
+	
+	return _search_bst(coords, _seed(coords), output, closed_list);
+	/*
 	struct list_head* i;
 	list_for_each(i, &closed_list)
 	{
@@ -323,7 +397,8 @@ int search_closed_list(struct coords coords, struct vertex** output)
 			break;
 		}
 	}
-	return test;
+	*/
+	//return test;
 }
 
 

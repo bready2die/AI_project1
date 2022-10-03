@@ -48,7 +48,8 @@ int search(double* path_cost, char alg)
 	{
 		struct vertex* s;
 		heap_pop(&fringe, &s); 
-		list_add(&(s->list), &closed_list);
+		//list_add(&(s->list), &closed_list);
+		add_to_closed_list (s);
 		if (COORDS_CMP(s->position, goalpos))
 		{
 			*path_cost = s->g;
