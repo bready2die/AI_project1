@@ -5,6 +5,7 @@
 #include <ctype.h>
 #include <errno.h>
 #include <limits.h>
+#include <sys/time.h>
 #include "input.h"
 #include "scene.h"
 #define TEST_GRID 1//
@@ -380,12 +381,16 @@ static struct icli_command_params load_params = {
 static enum icli_ret run_cmd(char **argv, int argc, void *context)
 {
 #ifdef TEST_GRID
+	struct timeval start, end; 
 	double output;
+	gettimeofday(&start, NULL);
 	if(run_algo(argv[0], &output)) {
 		icli_err_printf("error no path found\n");
 		return ICLI_ERR;
 	}
+	gettimeofday(&end, NULL);
 	icli_printf("total distance: %lf\n", output);
+	icli_printf("runtime: %lf\n ms", (double)(end.tv_sec - start.tv_sec) * 1000 + (double)(end.tv_usec - start.tv_usec) * 0.001);
 	//print output, or smth
 #else		
 	icli_printf("command not yet implemented\n");
